@@ -76,7 +76,7 @@ kometa.dark_theme = { -- dark
 	slider_background = Color3.fromRGB(37, 34, 41),
 	slider_text = Color3.fromRGB(177, 177, 177),
 
-	textbox_background = Color3.fromRGB(6108, 121, 239),
+	textbox_background = Color3.fromRGB(108, 121, 239),
 	textbox_background_hover = Color3.fromRGB(76, 61, 100),
 	textbox_text = Color3.fromRGB(195, 195, 195),
 	textbox_text_hover = Color3.fromRGB(232, 232, 232),
@@ -829,7 +829,7 @@ function kometa.new(isdark, gprojectName, thinProject)
 
 						cheat.list = kometa:Create("ScrollingFrame", {
 							Name = "List",
-							BackgroundColor3 = Color3.fromRGB(94, 54, 139),
+							BackgroundColor3 = Color3.fromRGB(108, 121, 239),
 							BackgroundTransparency = 0,
 							BorderSizePixel = 0,
 							Position = UDim2.new(0, 0, 1, 0),
