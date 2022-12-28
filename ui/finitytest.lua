@@ -829,7 +829,7 @@ function kometa.new(isdark, gprojectName, thinProject)
 
 						cheat.list = kometa:Create("ScrollingFrame", {
 							Name = "List",
-							BackgroundColor3 = Color3.fromRGB(74, 83, 160),
+							BackgroundColor3 = Color3.fromRGB(62, 70, 134),
 							BackgroundTransparency = 0,
 							BorderSizePixel = 0,
 							Position = UDim2.new(0, 0, 1, 0),
