@@ -424,12 +424,12 @@ function kometa.new(isdark, gprojectName, thinProject)
 		do
 			local uilistlayout = kometa:Create("UIListLayout", {
 				SortOrder = Enum.SortOrder.LayoutOrder,
-				Padding = UDim.new(0, 30)
+				Padding = UDim.new(0, 10)
 			})
 	
 			local uilistlayout2 = kometa:Create("UIListLayout", {
 				SortOrder = Enum.SortOrder.LayoutOrder,
-				Padding = UDim.new(0, 30)
+				Padding = UDim.new(0, 10)
 			})
 			
 			local function computeSizeChange()
