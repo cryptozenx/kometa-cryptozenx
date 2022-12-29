@@ -536,7 +536,7 @@ function kometa.new(isdark, gprojectName, thinProject)
 
 			local uilistlayout = kometa:Create("UIListLayout", {
 				SortOrder = Enum.SortOrder.LayoutOrder,
-				Padding = { 0, 30 }
+				Padding =  UDim2.new(0, 30)
 			})
 
             uilistlayout.Changed:Connect(function()
