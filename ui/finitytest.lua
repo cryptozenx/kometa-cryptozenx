@@ -143,7 +143,6 @@ function kometa.new(isdark, gprojectName, thinProject)
 
 	if not kometa.gs["RunService"]:IsStudio() and self.gs["CoreGui"]:FindFirstChild(cachename) then
 		warn("kometa:", "instance already exists in coregui!")
-		
 		return
 	end
 
@@ -525,18 +524,19 @@ function kometa.new(isdark, gprojectName, thinProject)
 			sector.title = kometa:Create("TextLabel", {
 				Name = "Title",
 				Text = name,
-				BackgroundColor3 = Color3.new(1, 1, 1),
+				BackgroundColor3 = Color3.new(0.607843, 0.678431, 1),
 				BackgroundTransparency = 1,
 				Size = UDim2.new(1, -5, 0, 25),
 				ZIndex = 2,
 				Font = Enum.Font.GothamSemibold,
 				TextColor3 = theme.text_color,
-				TextSize = 14,
+				TextSize = 18,
 				TextXAlignment = Enum.TextXAlignment.Left,
 			})
 
 			local uilistlayout = kometa:Create("UIListLayout", {
-				SortOrder = Enum.SortOrder.LayoutOrder
+				SortOrder = Enum.SortOrder.LayoutOrder,
+				Padding = { 0, 30 }
 			})
 
             uilistlayout.Changed:Connect(function()
