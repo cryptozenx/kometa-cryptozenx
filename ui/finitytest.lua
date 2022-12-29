@@ -518,7 +518,7 @@ function kometa.new(isdark, gprojectName, thinProject)
 				BackgroundColor3 = Color3.new(1, 1, 1),
 				BackgroundTransparency = 1,
 				Position = UDim2.new(0, 0, 0, 22),
-				Size = UDim2.new(1, -5, 1, -30),
+				Size = UDim2.new(1, -5, 1.5, -30),
 				ZIndex = 2
 			})
 
