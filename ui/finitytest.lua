@@ -62,6 +62,7 @@ kometa.dark_theme = { -- dark
 	main_container = Color3.fromRGB(23, 23, 23),
 	separator_color = Color3.fromRGB(72, 72, 72),
 
+	sector_text_color = Color3.fromRGB(161, 178, 255),
 	text_color = Color3.fromRGB(206, 206, 206),
 
 	category_button_background = Color3.fromRGB(63, 62, 65),
@@ -524,19 +525,18 @@ function kometa.new(isdark, gprojectName, thinProject)
 			sector.title = kometa:Create("TextLabel", {
 				Name = "Title",
 				Text = name,
-				BackgroundColor3 = Color3.new(0.607843, 0.678431, 1),
+				BackgroundColor3 = Color3.new(1, 1, 1),
 				BackgroundTransparency = 1,
 				Size = UDim2.new(1, -5, 0, 25),
 				ZIndex = 2,
 				Font = Enum.Font.GothamSemibold,
-				TextColor3 = theme.text_color,
-				TextSize = 18,
+				TextColor3 = theme.sector_text_color,
+				TextSize = 14,
 				TextXAlignment = Enum.TextXAlignment.Left,
 			})
 
 			local uilistlayout = kometa:Create("UIListLayout", {
 				SortOrder = Enum.SortOrder.LayoutOrder,
-				Padding = UDim.new(0, 30)
 			})
 
             uilistlayout.Changed:Connect(function()
