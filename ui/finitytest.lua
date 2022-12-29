@@ -423,11 +423,13 @@ function kometa.new(isdark, gprojectName, thinProject)
 		
 		do
 			local uilistlayout = kometa:Create("UIListLayout", {
-				SortOrder = Enum.SortOrder.LayoutOrder
+				SortOrder = Enum.SortOrder.LayoutOrder,
+				Padding = UDim(0, 30)
 			})
 	
 			local uilistlayout2 = kometa:Create("UIListLayout", {
-				SortOrder = Enum.SortOrder.LayoutOrder
+				SortOrder = Enum.SortOrder.LayoutOrder,
+				Padding = UDim(0, 30)
 			})
 			
 			local function computeSizeChange()
@@ -527,7 +529,7 @@ function kometa.new(isdark, gprojectName, thinProject)
 				Text = name,
 				BackgroundColor3 = Color3.new(1, 1, 1),
 				BackgroundTransparency = 1,
-				Size = UDim2.new(1, -5, 0, 25),
+				Size = UDim2.new(1, -5, 0, 23),
 				ZIndex = 2,
 				Font = Enum.Font.GothamSemibold,
 				TextColor3 = theme.sector_text_color,
