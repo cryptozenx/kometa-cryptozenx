@@ -464,7 +464,6 @@ function kometa.new(isdark, gprojectName, thinProject)
 				if categoryf:IsA("ScrollingFrame") then
 					if categoryf ~= category.container then
 						kometa.gs["TweenService"]:Create(categoryf.Hider, TweenInfo.new(0.3), {BackgroundTransparency = 0}):Play()
-					else
 						kometa.gs["TweenService"]:Create(categoryf, TweenInfo.new(0.3), {ScrollBarImageTransparency = 1}):Play()
 					end
 				end
@@ -476,9 +475,9 @@ function kometa.new(isdark, gprojectName, thinProject)
 
 			self2.categories["UIPageLayout"]:JumpTo(category.container)
 		end)
-		category.button.MouseButton1Up:Connect(function()
-			kometa.gs["TweenService"]:Create(category.button, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
-		end)
+		-- category.button.MouseButton1Up:Connect(function()
+		-- 	kometa.gs["TweenService"]:Create(category.button, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
+		-- end)
 
 		category.container.Parent = self2.categories
 		category.button.Parent = self2.sidebar
