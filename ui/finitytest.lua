@@ -129,7 +129,7 @@ function kometa:addShadow(object, transparency)
 		Size = UDim2.new(1, 6, 1, 6),
 		Image = "rbxassetid://1316045217",
 		ImageTransparency = transparency and true or 0.5,
-		ImageColor3 = Color3.fromRGB(35, 35, 35),
+		ImageColor3 = kometa.dark_theme.sector_text_color,
 		ScaleType = Enum.ScaleType.Slice,
 		SliceCenter = Rect.new(10, 10, 118, 118)
 	})
@@ -1401,7 +1401,7 @@ function kometa.new(isdark, gprojectName, thinProject)
 		return category
 	end
 
-	self:addShadow(self2.container, 0)
+	self:addShadow(self2.container, 0.5)
 
 	self2.categories.ClipsDescendants = true
 	
