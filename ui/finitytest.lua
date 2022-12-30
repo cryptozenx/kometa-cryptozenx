@@ -464,6 +464,7 @@ function kometa.new(isdark, gprojectName, thinProject)
 				if categoryf:IsA("ScrollingFrame") then
 					if categoryf ~= category.container then
 						kometa.gs["TweenService"]:Create(categoryf.Hider, TweenInfo.new(0.3), {BackgroundTransparency = 0}):Play()
+					else
 						kometa.gs["TweenService"]:Create(categoryf, TweenInfo.new(0.3), {ScrollBarImageTransparency = 1}):Play()
 					end
 				end
@@ -1401,7 +1402,7 @@ function kometa.new(isdark, gprojectName, thinProject)
 		return category
 	end
 
-	self:addShadow(self2.container, 0.5)
+	--self:addShadow(self2.container, 0.5)
 
 	self2.categories.ClipsDescendants = true
 	
