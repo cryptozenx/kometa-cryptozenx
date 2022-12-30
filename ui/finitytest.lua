@@ -78,7 +78,7 @@ kometa.dark_theme = { -- dark
 	slider_text = Color3.fromRGB(177, 177, 177),
 
 	textbox_background = Color3.fromRGB(84, 94, 184),
-	textbox_background_hover = Color3.fromRGB(76, 61, 100),
+	textbox_background_hover = Color3.fromRGB(50, 55, 107),
 	textbox_text = Color3.fromRGB(195, 195, 195),
 	textbox_text_hover = Color3.fromRGB(232, 232, 232),
 	textbox_placeholder = Color3.fromRGB(135, 135, 138),
@@ -89,7 +89,7 @@ kometa.dark_theme = { -- dark
 	dropdown_scrollbar_color = Color3.fromRGB(255,255,255),
 
 	button_background = Color3.fromRGB(84, 94, 184),
-	button_background_hover = Color3.fromRGB(76, 61, 100),
+	button_background_hover = Color3.fromRGB(50, 55, 107),
 	button_background_down = Color3.fromRGB(150, 112, 255),
 
 	scrollbar_color = Color3.fromRGB(118, 118, 121),
