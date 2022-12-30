@@ -475,9 +475,9 @@ function kometa.new(isdark, gprojectName, thinProject)
 
 			self2.categories["UIPageLayout"]:JumpTo(category.container)
 		end)
-		-- category.button.MouseButton1Up:Connect(function()
-		-- 	kometa.gs["TweenService"]:Create(category.button, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
-		-- end)
+		category.button.MouseButton1Up:Connect(function()
+			kometa.gs["TweenService"]:Create(category.button, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
+		end)
 
 		category.container.Parent = self2.categories
 		category.button.Parent = self2.sidebar
