@@ -572,7 +572,6 @@ function kometa.new(isdark, gprojectName, thinProject)
 					TextColor3 = theme.text_color,
 					TextSize = 13,
 					Text = name,
-					TextScaled = true,
 					TextXAlignment = Enum.TextXAlignment.Left
 				})
 
@@ -1071,7 +1070,7 @@ function kometa.new(isdark, gprojectName, thinProject)
 							BackgroundColor3 = Color3.new(1, 1, 1),
 							BackgroundTransparency = 1,
 							Position = UDim2.new(1, 0, 0.5, 0),
-							Size = UDim2.new(1, 0, 0, 6),
+							Size = UDim2.new(1, 0, 1, 0),
 							ZIndex = 2,
 							Image = "rbxassetid://3570695787",
 							ImageColor3 = theme.slider_background,
