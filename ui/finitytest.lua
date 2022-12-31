@@ -572,6 +572,7 @@ function kometa.new(isdark, gprojectName, thinProject)
 					TextColor3 = theme.text_color,
 					TextSize = 13,
 					Text = name,
+					TextScaled = true,
 					TextXAlignment = Enum.TextXAlignment.Left
 				})
 
