@@ -570,7 +570,8 @@ function kometa.new(isdark, gprojectName, thinProject)
 					ZIndex = 2,
 					Font = Enum.Font.Gotham,
 					TextColor3 = theme.text_color,
-					TextSize = 10,
+					--TextSize = 13,
+					TextScaled = true,
 					Text = name,
 					TextXAlignment = Enum.TextXAlignment.Left
 				})
