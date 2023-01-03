@@ -22,6 +22,7 @@ function API:Tween(Time, CF) -- tween to position
 end
 
 function API:WalkTo(Position, Condition) -- walk to position with repeat until
+    print(Condition)
     repeat
         task.wait()
         self:Humanoid():MoveTo(Position)
