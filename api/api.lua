@@ -21,12 +21,8 @@ function API:Tween(Time, CF) -- tween to position
     task.wait(Time)
 end
 
-function API:WalkTo(Position, Condition) -- walk to position with repeat until
-    print(Condition)
-    repeat
-        task.wait()
-        self:Humanoid():MoveTo(Position)
-    until Condition or (self:Root().Position - Position).Magnitude <= 5
+function API:WalkTo(Position) -- walk to position
+    self:Humanoid():MoveTo(Position)
 end
 
 function API:Teleport(CFrame) -- teleport to position
