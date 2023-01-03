@@ -33,6 +33,25 @@ function API:Magnitude(Pos1, Pos2) -- return positions magnitude
     return (Pos1 - Pos2).Magnitude
 end
 
+function API:Pathfind(Position)
+    local PathfindingService = game:GetService("PathfindingService")
+    local Humanoid = self:Humanoid()
+    local Root = self:Root()
+    local Path = PathfindingService:CreatePath({
+        AgentCanJump = true,
+        WaypointSpacing = 1
+    })
+    Path:ComputeAsync(Root.Position, Position)
+    local waypoints = Path:GetWaypoints()
+    for i, waypoint in ipairs(waypoints) do
+        Humanoid:MoveTo(waypoint.Position)
+        Humanoid.MoveToFinished:Wait()
+        if waypoint.Action == Enum.PathWaypointAction.Jump then
+            Humanoid.Jump = true
+        end
+    end
+end
+
 function API:Notify(Title, Description, Duration) -- send notification
     pcall(function()
         game:GetService('StarterGui'):SetCore("SendNotification", {
