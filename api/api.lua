@@ -40,9 +40,15 @@ function API:Tween(Time, CF) -- tween to position
 end
 
 function API:WalkTo(Position, Condition) -- walk to position with repeat until
+    if not Condition then Condition = (self:Root().Position - Position).Magnitude <= 5 end
     repeat
+        task.wait()
         self:Humanoid():MoveTo(Position)
     until Condition
+end
+
+function API:Teleport(CFrame) -- teleport to position
+    self:Root().CFrame = CFrame
 end
 
 function API:Magnitude(Pos1, Pos2) -- return positions magnitude
