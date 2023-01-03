@@ -1,25 +1,7 @@
 local API = {}
 
-function API:LoadServices() -- load services
-    API.Services = {}
-    setmetatable(API.Services, {
-        __index = function(_, service)
-            return game:GetService(service)
-        end,
-        __newindex = function(t, i)
-            t[i] = nil
-            return
-        end
-    })
-end
-
-function API:GetService(Service) -- return service
-    if not self.Services[Service] then error("Service not found") end
-    return self.Services[Service]
-end
-
 function API:Player() -- returns the player
-    return API.Services["Players"].LocalPlayer
+    return game:GetService('Players').LocalPlayer
 end
 
 function API:Character() -- returns the player character
@@ -35,7 +17,7 @@ function API:Humanoid() -- returns the humanoid
 end
 
 function API:Tween(Time, CF) -- tween to position
-    self.Services["TweenService"]:Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Time, Enum.EasingStyle.Linear), {CFrame = CF}):Play() 
+    game:GetService('TweenService'):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Time, Enum.EasingStyle.Linear), {CFrame = CF}):Play() 
     task.wait(Time)
 end
 
@@ -56,7 +38,7 @@ end
 
 function API:Notify(Title, Description, Duration) -- send notification
     pcall(function()
-        self.Services["StarterGui"]:SetCore("SendNotification", {
+        game:GetService('StarterGui'):SetCore("SendNotification", {
             Title = Title;
             Text = Description;
             Duration = Duration;
@@ -144,11 +126,9 @@ function API:ImageHook(Hook, Description, Title, Image) -- send webhook
             Headers = {
                 ['Content-Type'] = 'application/json';
             };
-            Body = game:GetService'HttpService':JSONEncode( { content = Content; embeds = { Embed } } );
+            Body = game:GetService('HttpService'):JSONEncode( { content = Content; embeds = { Embed } } );
         };
     end)
 end
-
-API:LoadServices()
 
 return API
