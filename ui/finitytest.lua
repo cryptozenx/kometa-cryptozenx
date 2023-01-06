@@ -1421,8 +1421,6 @@ function kometa.new(isdark, gprojectName, thinProject)
 	self2.topbar.Parent = self2.container
 	self2.tip.Parent = self2.topbar
 
-	self2.container:TweenPosition(UDim2.new(0.5, 0, 0.5, 0), "Out", "Sine", 0.5, true)
-
 	return self2, kometaData
 end
 
