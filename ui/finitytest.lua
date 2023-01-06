@@ -192,7 +192,7 @@ function kometa.new(isdark, gprojectName, thinProject)
                 if toggled then
 					pcall(self2.container.TweenPosition, self2.container, savedposition, "Out", "Sine", 0.5, true)
                 else
-                    savedposition = self2.container.Position;
+                    --savedposition = self2.container.Position;
 					pcall(self2.container.TweenPosition, self2.container, UDim2.new(savedposition.Width.Scale, savedposition.Width.Offset, 1.5, 0), "Out", "Sine", 0.5, true)
 				end
 			end
