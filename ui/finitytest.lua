@@ -166,7 +166,6 @@ function kometa.new(isdark, gprojectName, thinProject)
 	local firstCategory = true
     local savedposition = UDim2.new(0.5, 0, 0.5, 0)
     
-
 	local kometaData
 	kometaData = {
 		UpConnection = nil,
@@ -199,7 +198,7 @@ function kometa.new(isdark, gprojectName, thinProject)
 					pcall(self2.container.TweenPosition, self2.container, UDim2.new(savedposition.Width.Scale, savedposition.Width.Offset, 1.5, 0), "Out", "Sine", 0.5, true)
 				end
 
-				task.wait(1)
+				task.wait(0.7)
 
 				TweenCooldown = false
 			end
@@ -228,7 +227,7 @@ function kometa.new(isdark, gprojectName, thinProject)
 				self2.container:TweenPosition(UDim2.new(0.5, 0, 1.5, 0), "Out", "Sine", 0.5, true)
 			end
 
-			task.wait(1)
+			task.wait(0.7)
 
 			TweenCooldown = false
 		end
