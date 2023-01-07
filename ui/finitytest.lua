@@ -160,6 +160,7 @@ function kometa.new(isdark, gprojectName, thinProject)
         thinProject = nil
     end
 	
+	local TweenCooldown = false
 	local toggled = true
 	local typing = false
 	local firstCategory = true
@@ -184,17 +185,23 @@ function kometa.new(isdark, gprojectName, thinProject)
 		end
 
 		kometaData.UpConnection = kometa.gs["UserInputService"].InputEnded:Connect(function(Input)
-			if Input.KeyCode == kometaData.ToggleKey and not typing then
+			if Input.KeyCode == kometaData.ToggleKey and not typing and not TweenCooldown then
                 toggled = not toggled
+
+				TweenCooldown = true
 
                 pcall(function() self2.modal.Modal = toggled end)
 
                 if toggled then
 					pcall(self2.container.TweenPosition, self2.container, savedposition, "Out", "Sine", 0.5, true)
                 else
-                    --savedposition = self2.container.Position;
+                    savedposition = self2.container.Position;
 					pcall(self2.container.TweenPosition, self2.container, UDim2.new(savedposition.Width.Scale, savedposition.Width.Offset, 1.5, 0), "Out", "Sine", 0.5, true)
 				end
+
+				task.wait(1)
+
+				TweenCooldown = false
 			end
 		end)
 	end
@@ -210,14 +217,20 @@ function kometa.new(isdark, gprojectName, thinProject)
 	end
 
 	kometaData.UpConnection = kometa.gs["UserInputService"].InputEnded:Connect(function(Input)
-		if Input.KeyCode == kometaData.ToggleKey and not typing then
+		if Input.KeyCode == kometaData.ToggleKey and not typing and not TweenCooldown then
 			toggled = not toggled
+
+			TweenCooldown = true
 
 			if toggled then
 				self2.container:TweenPosition(UDim2.new(0.5, 0, 0.5, 0), "Out", "Sine", 0.5, true)
 			else
 				self2.container:TweenPosition(UDim2.new(0.5, 0, 1.5, 0), "Out", "Sine", 0.5, true)
 			end
+
+			task.wait(1)
+
+			TweenCooldown = false
 		end
 	end)
 
