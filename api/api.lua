@@ -1,5 +1,10 @@
 local API = {} do
-    
+
+    function API:Sort(Table, Function, ...) 
+        table.sort(Table, Function, ...)
+        return Table or {}
+    end
+
     function API:Player() -- returns the player
         return game:GetService('Players').LocalPlayer
     end
@@ -17,12 +22,16 @@ local API = {} do
     end
     
     function API:Tween(Time, CF) -- tween to position
-        game:GetService('TweenService'):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Time, Enum.EasingStyle.Linear), {CFrame = CF}):Play() 
-        task.wait(Time)
+        pcall(function()
+            game:GetService('TweenService'):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Time, Enum.EasingStyle.Linear), {CFrame = CF}):Play() 
+            task.wait(Time)
+        end)
     end
 
     function API:TweenNoDelay(Time, CF) -- tween to position without delay
-        game:GetService('TweenService'):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Time, Enum.EasingStyle.Linear), {CFrame = CF}):Play() 
+        pcall(function()
+            game:GetService('TweenService'):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Time, Enum.EasingStyle.Linear), {CFrame = CF}):Play() 
+        end)
     end
     
     function API:WalkTo(Position) -- walk to position
