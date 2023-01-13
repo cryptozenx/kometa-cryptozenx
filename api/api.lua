@@ -1,5 +1,15 @@
 local API = {} do
 
+    function API:Properties(Table, Property) 
+        local PropertiesTable = {}
+        for _, Instance in next, Table do
+            if Instance and Instance[Property] then
+                table.insert(PropertiesTable, Instance[Property])
+            end
+        end
+        return PropertiesTable
+    end
+
     function API:Sort(Table, Function, ...) 
         table.sort(Table, Function, ...)
         return Table or {}
