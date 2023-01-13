@@ -5,6 +5,14 @@ local API = {} do
         return Table or {}
     end
 
+    function API:Indexes(Table)
+        local Indexes = {}
+        for Index, _ in next, Table do
+            table.insert(Indexes, Index)
+        end
+        return Indexes
+    end
+
     function API:Player() -- returns the player
         return game:GetService('Players').LocalPlayer
     end
