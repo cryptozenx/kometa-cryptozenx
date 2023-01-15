@@ -407,11 +407,13 @@ function finity.new(isdark, gprojectName, thinProject)
 
 		do
 			local uilistlayout = finity:Create("UIListLayout", {
-				SortOrder = Enum.SortOrder.LayoutOrder
+				SortOrder = Enum.SortOrder.LayoutOrder,
+				Padding = UDim.new(0, 10)
 			})
 
 			local uilistlayout2 = finity:Create("UIListLayout", {
-				SortOrder = Enum.SortOrder.LayoutOrder
+				SortOrder = Enum.SortOrder.LayoutOrder,
+				Padding = UDim.new(0, 10)
 			})
 
 			local function computeSizeChange()
@@ -423,6 +425,8 @@ function finity.new(isdark, gprojectName, thinProject)
 					largestListSize = largestListSize
 				end
 
+				largestListSize = largestListSize + 200
+				
 				category.container.CanvasSize = UDim2.new(0, 0, 0, largestListSize + 5)
 			end
 
