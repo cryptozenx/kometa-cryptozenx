@@ -84,7 +84,6 @@ setmetatable(finity.gs, {
 	end
 })
 
-
 local mouse = finity.gs["Players"].LocalPlayer:GetMouse()
 
 function finity:Create(class, properties)
@@ -134,11 +133,12 @@ function finity.new(isdark, gprojectName, thinProject)
 	if gprojectName then projectName = gprojectName end
 	if thinProject then thinMenu = thinProject end
 	
+	local TweenCooldown = false
 	local toggled = true
 	local typing = false
 	local firstCategory = true
     local savedposition = UDim2.new(0.5, 0, 0.5, 0)
-    
+    local ContainerSize = UDim2.new(0, 900, 0, 350)
 
 	local finityData
 	finityData = {
@@ -158,8 +158,10 @@ function finity.new(isdark, gprojectName, thinProject)
 		end
 
 		finityData.UpConnection = finity.gs["UserInputService"].InputEnded:Connect(function(Input)
-			if Input.KeyCode == finityData.ToggleKey and not typing then
+			if Input.KeyCode == finityData.ToggleKey and not typing and not TweenCooldown then
                 toggled = not toggled
+
+				TweenCooldown = true
 
                 pcall(function() self2.modal.Modal = toggled end)
 
@@ -169,6 +171,10 @@ function finity.new(isdark, gprojectName, thinProject)
                     savedposition = self2.container.Position;
 					pcall(self2.container.TweenPosition, self2.container, UDim2.new(savedposition.Width.Scale, savedposition.Width.Offset, 1.5, 0), "Out", "Sine", 0.5, true)
 				end
+
+				task.wait(0.7)
+
+				TweenCooldown = false
 			end
 		end)
 	end
@@ -210,7 +216,7 @@ function finity.new(isdark, gprojectName, thinProject)
 		BackgroundColor3 = theme.main_container,
 		BorderSizePixel = 0,
 		Position = UDim2.new(0.5, 0, 0.5, 0),
-		Size = UDim2.new(0, 800, 0, 500),
+		Size = ContainerSize,
 		ZIndex = 2,
 		ImageTransparency = 1
     })
@@ -506,8 +512,8 @@ function finity.new(isdark, gprojectName, thinProject)
 				Size = UDim2.new(1, -5, 0, 25),
 				ZIndex = 2,
 				Font = Enum.Font.GothamSemibold,
-				TextColor3 = theme.text_color,
-				TextSize = 14,
+				TextColor3 = theme.sector_text_color,
+				TextSize = 16,
 				TextXAlignment = Enum.TextXAlignment.Left,
 			})
 
