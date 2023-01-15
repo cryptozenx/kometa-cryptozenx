@@ -30,16 +30,16 @@ finity.theme = { -- light
 	dropdown_text = Color3.fromRGB(112, 112, 112),
 	dropdown_text_hover = Color3.fromRGB(50, 50, 50),
 	dropdown_scrollbar_color = Color3.fromRGB(198, 189, 202),
-	
+
 	button_background = Color3.fromRGB(198, 189, 202),
 	button_background_hover = Color3.fromRGB(215, 206, 227),
 	button_background_down = Color3.fromRGB(178, 169, 182),
-	
+
 	scrollbar_color = Color3.fromRGB(198, 189, 202),
 }
 
 finity.dark_theme = { -- dark
-    main_container = Color3.fromRGB(23, 23, 23),
+	main_container = Color3.fromRGB(23, 23, 23),
 	separator_color = Color3.fromRGB(72, 72, 72),
 
 	sector_text_color = Color3.fromRGB(161, 178, 255),
@@ -128,17 +128,17 @@ function finity.new(isdark, gprojectName, thinProject)
 	local theme = finity.theme
 	local projectName = false
 	local thinMenu = false
-	
+
 	if isdark == true then theme = finity.dark_theme end
 	if gprojectName then projectName = gprojectName end
 	if thinProject then thinMenu = thinProject end
-	
+
 	local TweenCooldown = false
 	local toggled = true
 	local typing = false
 	local firstCategory = true
-    local savedposition = UDim2.new(0.5, 0, 0.5, 0)
-    local ContainerSize = UDim2.new(0, 900, 0, 350)
+	local savedposition = UDim2.new(0.5, 0, 0.5, 0)
+	local ContainerSize = UDim2.new(0, 900, 0, 350)
 
 	local finityData
 	finityData = {
@@ -148,27 +148,27 @@ function finity.new(isdark, gprojectName, thinProject)
 
 	self2.ChangeToggleKey = function(NewKey)
 		finityData.ToggleKey = NewKey
-		
+
 		if not projectName then
 			self2.tip.Text = "Press '".. string.sub(tostring(NewKey), 14) .."' to hide this menu"
 		end
-		
+
 		if finityData.UpConnection then
 			finityData.UpConnection:Disconnect()
 		end
 
 		finityData.UpConnection = finity.gs["UserInputService"].InputEnded:Connect(function(Input)
 			if Input.KeyCode == finityData.ToggleKey and not typing and not TweenCooldown then
-                toggled = not toggled
+				toggled = not toggled
 
 				TweenCooldown = true
 
-                pcall(function() self2.modal.Modal = toggled end)
+				pcall(function() self2.modal.Modal = toggled end)
 
-                if toggled then
+				if toggled then
 					pcall(self2.container.TweenPosition, self2.container, savedposition, "Out", "Sine", 0.5, true)
-                else
-                    savedposition = self2.container.Position;
+				else
+					savedposition = self2.container.Position;
 					pcall(self2.container.TweenPosition, self2.container, UDim2.new(savedposition.Width.Scale, savedposition.Width.Offset, 1.5, 0), "Out", "Sine", 0.5, true)
 				end
 
@@ -178,10 +178,10 @@ function finity.new(isdark, gprojectName, thinProject)
 			end
 		end)
 	end
-	
+
 	self2.ChangeBackgroundImage = function(ImageID, Transparency)
 		self2.container.Image = ImageID
-		
+
 		if Transparency then
 			self2.container.ImageTransparency = Transparency
 		else
@@ -219,14 +219,14 @@ function finity.new(isdark, gprojectName, thinProject)
 		Size = ContainerSize,
 		ZIndex = 2,
 		ImageTransparency = 1
-    })
-    
-    self2.modal = self:Create("TextButton", {
-        Text = "";
-        Transparency = 1;
-        Modal = true;
-    }) self2.modal.Parent = self2.userinterface;
-	
+	})
+
+	self2.modal = self:Create("TextButton", {
+		Text = "";
+		Transparency = 1;
+		Modal = true;
+	}) self2.modal.Parent = self2.userinterface;
+
 	if thinProject and typeof(thinProject) == "UDim2" then
 		self2.container.Size = thinProject
 	end
@@ -276,16 +276,16 @@ function finity.new(isdark, gprojectName, thinProject)
 		BackgroundTransparency = 1,
 		TextColor3 = theme.text_color,
 	})
-	
+
 	if projectName then
 		self2.tip.Text = projectName
 	else
 		self2.tip.Text = "Press '".. string.sub(tostring(self.ToggleKey), 14) .."' to hide this menu"
 	end
-    
-    function finity.settitle(text)
-        self2.tip.Text = tostring(text)
-    end
+
+	function finity.settitle(text)
+		self2.tip.Text = tostring(text)
+	end
 
 	local separator = self:Create("Frame", {
 		Name = "Separator",
@@ -335,7 +335,7 @@ function finity.new(isdark, gprojectName, thinProject)
 
 	function self2:Category(name)
 		local category = {}
-		
+
 		category.button = finity:Create("TextButton", {
 			Name = name,
 			BackgroundColor3 = theme.category_button_background,
@@ -383,7 +383,7 @@ function finity.new(isdark, gprojectName, thinProject)
 			Size = UDim2.new(0.5, -20, 1, -3),
 			ZIndex = 2
 		})
-		
+
 		if not thinProject then
 			category.R = finity:Create("Frame", {
 				Name = "R",
@@ -395,44 +395,44 @@ function finity.new(isdark, gprojectName, thinProject)
 				ZIndex = 2
 			})
 		end
-		
+
 		if thinProject then
 			category.L.Size = UDim2.new(1, -20, 1, -3)
 		end
-		
+
 		if firstCategory then
 			finity.gs["TweenService"]:Create(category.hider, TweenInfo.new(0.3), {BackgroundTransparency = 1}):Play()
 			finity.gs["TweenService"]:Create(category.container, TweenInfo.new(0.3), {ScrollBarImageTransparency = 0}):Play()
 		end
-		
+
 		do
 			local uilistlayout = finity:Create("UIListLayout", {
 				SortOrder = Enum.SortOrder.LayoutOrder
 			})
-	
+
 			local uilistlayout2 = finity:Create("UIListLayout", {
 				SortOrder = Enum.SortOrder.LayoutOrder
 			})
-			
+
 			local function computeSizeChange()
 				local largestListSize = 0
-				
+
 				largestListSize = uilistlayout.AbsoluteContentSize.Y
-				
+
 				if uilistlayout2.AbsoluteContentSize.Y > largestListSize then
 					largestListSize = largestListSize
 				end
-				
+
 				category.container.CanvasSize = UDim2.new(0, 0, 0, largestListSize + 5)
 			end
-			
+
 			uilistlayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(computeSizeChange)
 			uilistlayout2:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(computeSizeChange)
-			
+
 			uilistlayout.Parent = category.L
 			uilistlayout2.Parent = category.R
 		end
-		
+
 		category.button.MouseEnter:Connect(function()
 			finity.gs["TweenService"]:Create(category.button, TweenInfo.new(0.2), {BackgroundTransparency = 0.5}):Play()
 		end)
@@ -461,11 +461,11 @@ function finity.new(isdark, gprojectName, thinProject)
 
 		category.container.Parent = self2.categories
 		category.button.Parent = self2.sidebar
-		
+
 		if not thinProject then
 			category.R.Parent = category.container
 		end
-		
+
 		category.L.Parent = category.container
 		category.hider.Parent = category.container
 
@@ -473,7 +473,7 @@ function finity.new(isdark, gprojectName, thinProject)
 			if thinProject then
 				return "L"
 			end
-			
+
 			local R = #category.R:GetChildren() - 1
 			local L = #category.L:GetChildren() - 1
 
@@ -521,11 +521,11 @@ function finity.new(isdark, gprojectName, thinProject)
 				SortOrder = Enum.SortOrder.LayoutOrder
 			})
 
-            uilistlayout.Changed:Connect(function()
-                pcall(function()
-                    sector.frame.Size = UDim2.new(1, 0, 0, sector.container["UIListLayout"].AbsoluteContentSize.Y + 25)
-                    sector.container.Size = UDim2.new(1, 0, 0, sector.container["UIListLayout"].AbsoluteContentSize.Y)
-                end)
+			uilistlayout.Changed:Connect(function()
+				pcall(function()
+					sector.frame.Size = UDim2.new(1, 0, 0, sector.container["UIListLayout"].AbsoluteContentSize.Y + 25)
+					sector.container.Size = UDim2.new(1, 0, 0, sector.container["UIListLayout"].AbsoluteContentSize.Y)
+				end)
 			end)
 			uilistlayout.Parent = sector.container
 			uilistlayout = nil
@@ -564,7 +564,7 @@ function finity.new(isdark, gprojectName, thinProject)
 					Size = UDim2.new(0, 150, 0, 22),
 					ZIndex = 2,
 				})
-				
+
 				if kind then
 					if string.lower(kind) == "checkbox" or string.lower(kind) == "toggle" then
 						if data then
@@ -658,8 +658,8 @@ function finity.new(isdark, gprojectName, thinProject)
 						end)
 
 						function cheat:SetValue(value)
-                            cheat.value = value
-             
+							cheat.value = value
+
 							if callback then
 								local s, e = pcall(function()
 									callback(cheat.value)
@@ -675,23 +675,23 @@ function finity.new(isdark, gprojectName, thinProject)
 								finity.gs["TweenService"]:Create(cheat.outerbox, TweenInfo.new(0.2), {ImageColor3 = theme.checkbox_outer}):Play()
 								finity.gs["TweenService"]:Create(cheat.checkboxbutton, TweenInfo.new(0.2), {ImageColor3 = theme.checkbox_inner}):Play()
 							end
-                        end
+						end
 
 						cheat.checkboxbutton.Parent = cheat.outerbox
-                        cheat.outerbox.Parent = cheat.container
-                    elseif string.lower(kind) == "color" or string.lower(kind) == "colorpicker" then
-                        cheat.value = Color3.new(1, 1, 1);
+						cheat.outerbox.Parent = cheat.container
+					elseif string.lower(kind) == "color" or string.lower(kind) == "colorpicker" then
+						cheat.value = Color3.new(1, 1, 1);
 
 						if data then
 							if data.color then
 								cheat.value = data.color
 							end
-                        end
-                        
-                        local hsvimage = "rbxassetid://4613607014"
-                        local lumienceimage = "rbxassetid://4613627894"
-                        
-                        cheat.hsvbar = finity:Create("ImageButton", {
+						end
+
+						local hsvimage = "rbxassetid://4613607014"
+						local lumienceimage = "rbxassetid://4613627894"
+
+						cheat.hsvbar = finity:Create("ImageButton", {
 							AnchorPoint = Vector2.new(0.5, 0.5),
 							Name = "HSVBar",
 							BackgroundColor3 = Color3.new(1, 1, 1),
@@ -699,105 +699,105 @@ function finity.new(isdark, gprojectName, thinProject)
 							Position = UDim2.new(0.5, 0, 0.5, 0),
 							Size = UDim2.new(1, 0, 0, 6),
 							ZIndex = 2,
-                            Image = hsvimage
-                        })
+							Image = hsvimage
+						})
 
-                        cheat.arrowpreview = finity:Create("ImageLabel", {
-                            Name = "ArrowPreview",
-                            BackgroundColor3 = Color3.new(1, 1, 1),
-                            BackgroundTransparency = 1,
-                            ImageTransparency = 0.25,
-                            Position = UDim2.new(0.5, 0, 0.5, -6),
-                            Size = UDim2.new(0, 6, 0, 6),
-                            ZIndex = 3,
-                            Image = "rbxassetid://2500573769",
-                            Rotation = -90
-                        })
-                        
-                        cheat.hsvbar.MouseButton1Down:Connect(function()
-                            local rs = finity.gs["RunService"]
-                            local uis = finity.gs["UserInputService"]local last = cheat.value;
+						cheat.arrowpreview = finity:Create("ImageLabel", {
+							Name = "ArrowPreview",
+							BackgroundColor3 = Color3.new(1, 1, 1),
+							BackgroundTransparency = 1,
+							ImageTransparency = 0.25,
+							Position = UDim2.new(0.5, 0, 0.5, -6),
+							Size = UDim2.new(0, 6, 0, 6),
+							ZIndex = 3,
+							Image = "rbxassetid://2500573769",
+							Rotation = -90
+						})
 
-                            cheat.hsvbar.Image = hsvimage
+						cheat.hsvbar.MouseButton1Down:Connect(function()
+							local rs = finity.gs["RunService"]
+							local uis = finity.gs["UserInputService"]local last = cheat.value;
 
-                            while uis:IsMouseButtonPressed'MouseButton1' do
-                                local mouseloc = uis:GetMouseLocation()
-                                local sx = cheat.arrowpreview.AbsoluteSize.X / 2;
-                                local offset = (mouseloc.x - cheat.hsvbar.AbsolutePosition.X) - sx
-                                local scale = offset / cheat.hsvbar.AbsoluteSize.X
-                                local position = math.clamp(offset, -sx, cheat.hsvbar.AbsoluteSize.X - sx) / cheat.hsvbar.AbsoluteSize.X
+							cheat.hsvbar.Image = hsvimage
 
-                                finity.gs["TweenService"]:Create(cheat.arrowpreview, TweenInfo.new(0.1), {Position = UDim2.new(position, 0, 0.5, -6)}):Play()
-                                
-                                cheat.value = Color3.fromHSV(math.clamp(scale, 0, 1), 1, 1)
+							while uis:IsMouseButtonPressed'MouseButton1' do
+								local mouseloc = uis:GetMouseLocation()
+								local sx = cheat.arrowpreview.AbsoluteSize.X / 2;
+								local offset = (mouseloc.x - cheat.hsvbar.AbsolutePosition.X) - sx
+								local scale = offset / cheat.hsvbar.AbsoluteSize.X
+								local position = math.clamp(offset, -sx, cheat.hsvbar.AbsoluteSize.X - sx) / cheat.hsvbar.AbsoluteSize.X
 
-                                if cheat.value ~= last then
-                                    last = cheat.value
-                                    
-                                    if callback then
-                                        local s, e = pcall(function()
-                                            callback(cheat.value)
-                                        end)
-        
-                                        if not s then warn("error: ".. e) end
-                                    end
-                                end
+								finity.gs["TweenService"]:Create(cheat.arrowpreview, TweenInfo.new(0.1), {Position = UDim2.new(position, 0, 0.5, -6)}):Play()
 
-                                rs.RenderStepped:wait()
-                            end
-                        end)
-                        cheat.hsvbar.MouseButton2Down:Connect(function()
-                            local rs = finity.gs["RunService"]
-                            local uis = finity.gs["UserInputService"]
-                            local last = cheat.value;
+								cheat.value = Color3.fromHSV(math.clamp(scale, 0, 1), 1, 1)
 
-                            cheat.hsvbar.Image = lumienceimage
+								if cheat.value ~= last then
+									last = cheat.value
 
-                            while uis:IsMouseButtonPressed'MouseButton2' do
-                                local mouseloc = uis:GetMouseLocation()
-                                local sx = cheat.arrowpreview.AbsoluteSize.X / 2
-                                local offset = (mouseloc.x - cheat.hsvbar.AbsolutePosition.X) - sx
-                                local scale = offset / cheat.hsvbar.AbsoluteSize.X
-                                local position = math.clamp(offset, -sx, cheat.hsvbar.AbsoluteSize.X - sx) / cheat.hsvbar.AbsoluteSize.X
+									if callback then
+										local s, e = pcall(function()
+											callback(cheat.value)
+										end)
 
-                                finity.gs["TweenService"]:Create(cheat.arrowpreview, TweenInfo.new(0.1), {Position = UDim2.new(position, 0, 0.5, -6)}):Play()
-                                
-                                cheat.value = Color3.fromHSV(1, 0, 1 - math.clamp(scale, 0, 1))
+										if not s then warn("error: ".. e) end
+									end
+								end
 
-                                if cheat.value ~= last then
-                                    last = cheat.value
+								rs.RenderStepped:wait()
+							end
+						end)
+						cheat.hsvbar.MouseButton2Down:Connect(function()
+							local rs = finity.gs["RunService"]
+							local uis = finity.gs["UserInputService"]
+							local last = cheat.value;
 
-                                    if callback then
-                                        local s, e = pcall(function()
-                                            callback(cheat.value)
-                                        end)
-        
-                                        if not s then warn("error: ".. e) end
-                                    end
-                                end
+							cheat.hsvbar.Image = lumienceimage
 
-                                rs.RenderStepped:wait()
-                            end
-                        end)
+							while uis:IsMouseButtonPressed'MouseButton2' do
+								local mouseloc = uis:GetMouseLocation()
+								local sx = cheat.arrowpreview.AbsoluteSize.X / 2
+								local offset = (mouseloc.x - cheat.hsvbar.AbsolutePosition.X) - sx
+								local scale = offset / cheat.hsvbar.AbsoluteSize.X
+								local position = math.clamp(offset, -sx, cheat.hsvbar.AbsoluteSize.X - sx) / cheat.hsvbar.AbsoluteSize.X
 
-                        function cheat:SetValue(value)
-                            cheat.value = value
-                            if cheat.value then
-                                finity.gs["TweenService"]:Create(cheat.outerbox, TweenInfo.new(0.2), {ImageColor3 = theme.checkbox_checked}):Play()
+								finity.gs["TweenService"]:Create(cheat.arrowpreview, TweenInfo.new(0.1), {Position = UDim2.new(position, 0, 0.5, -6)}):Play()
+
+								cheat.value = Color3.fromHSV(1, 0, 1 - math.clamp(scale, 0, 1))
+
+								if cheat.value ~= last then
+									last = cheat.value
+
+									if callback then
+										local s, e = pcall(function()
+											callback(cheat.value)
+										end)
+
+										if not s then warn("error: ".. e) end
+									end
+								end
+
+								rs.RenderStepped:wait()
+							end
+						end)
+
+						function cheat:SetValue(value)
+							cheat.value = value
+							if cheat.value then
+								finity.gs["TweenService"]:Create(cheat.outerbox, TweenInfo.new(0.2), {ImageColor3 = theme.checkbox_checked}):Play()
 								finity.gs["TweenService"]:Create(cheat.checkboxbutton, TweenInfo.new(0.2), {ImageColor3 = theme.checkbox_checked}):Play()
-                            else
-                                finity.gs["TweenService"]:Create(cheat.outerbox, TweenInfo.new(0.2), {ImageColor3 = theme.checkbox_outer}):Play()
+							else
+								finity.gs["TweenService"]:Create(cheat.outerbox, TweenInfo.new(0.2), {ImageColor3 = theme.checkbox_outer}):Play()
 								finity.gs["TweenService"]:Create(cheat.checkboxbutton, TweenInfo.new(0.2), {ImageColor3 = theme.checkbox_inner}):Play()
-                            end
-                            if callback then
-                                local s, e = pcall(function()
-                                    callback(cheat.value)
-                                end)
-                                if not s then 
-                                    warn("error: "..e) 
-                                end
-                            end
-                        end
+							end
+							if callback then
+								local s, e = pcall(function()
+									callback(cheat.value)
+								end)
+								if not s then 
+									warn("error: "..e) 
+								end
+							end
+						end
 
 						cheat.hsvbar.Parent = cheat.container
 						cheat.arrowpreview.Parent = cheat.hsvbar
@@ -811,9 +811,9 @@ function finity.new(isdark, gprojectName, thinProject)
 								cheat.value = "None"
 							end
 						end
-						
+
 						local options
-						
+
 						if data and data.options then
 							options = data.options
 						end
@@ -875,18 +875,18 @@ function finity.new(isdark, gprojectName, thinProject)
 						})
 						uipadding.Parent = cheat.list
 						uipadding = nil
-						
+
 						local function refreshOptions()
 							if cheat.dropped then
 								cheat.fadelist()
 							end	
-							
+
 							for _, child in next, cheat.list:GetChildren() do
 								if child:IsA("TextButton") then
 									child:Destroy()
 								end
 							end
-							
+
 							for _, value in next, options do
 								local button = finity:Create("TextButton", {
 									BackgroundColor3 = Color3.new(1, 1, 1),
@@ -898,9 +898,9 @@ function finity.new(isdark, gprojectName, thinProject)
 									TextColor3 = theme.dropdown_text,
 									TextSize = 13
 								})
-	
+
 								button.Parent = cheat.list
-	
+
 								button.MouseEnter:Connect(function()
 									finity.gs["TweenService"]:Create(button, TweenInfo.new(0.1), {TextColor3 = theme.dropdown_text_hover}):Play()
 								end)
@@ -911,27 +911,27 @@ function finity.new(isdark, gprojectName, thinProject)
 									if cheat.dropped then
 										cheat.value = value
 										cheat.selected.Text = value
-	
+
 										cheat.fadelist()
-										
+
 										if callback then
 											local s, e = pcall(function()
 												callback(cheat.value)
 											end)
-	
+
 											if not s then warn("error: ".. e) end
 										end
 									end
 								end)
-								
-								
+
+
 								finity.gs["TweenService"]:Create(button, TweenInfo.new(0), {TextTransparency = 1}):Play()
 							end
-							
+
 							finity.gs["TweenService"]:Create(cheat.list, TweenInfo.new(0), {Size = UDim2.new(1, 0, 0, 0), Position = UDim2.new(0, 0, 1, 0), CanvasSize = UDim2.new(0, 0, 0, cheat.list["UIListLayout"].AbsoluteContentSize.Y), ScrollBarImageTransparency = 1, BackgroundTransparency = 1}):Play()
 						end
-						
-						
+
+
 						function cheat.fadelist()
 							cheat.dropped = not cheat.dropped
 
@@ -965,7 +965,7 @@ function finity.new(isdark, gprojectName, thinProject)
 						end)
 
 						refreshOptions()
-						
+
 						function cheat:RemoveOption(value)
 							local removed = false
 							for index, option in next, options do
@@ -975,28 +975,28 @@ function finity.new(isdark, gprojectName, thinProject)
 									break
 								end
 							end
-							
+
 							if removed then
 								refreshOptions()
 							end
-							
+
 							return removed
 						end
-						
+
 						function cheat:AddOption(value)
 							table.insert(options, value)
-							
+
 							refreshOptions()
 						end
-						
+
 						function cheat:SetValue(value)
 							cheat.selected.Text = value
 							cheat.value = value
-							
+
 							if cheat.dropped then
 								cheat.fadelist()
 							end
-							
+
 							if callback then
 								local s, e = pcall(function()
 									callback(cheat.value)
@@ -1038,8 +1038,8 @@ function finity.new(isdark, gprojectName, thinProject)
 							TextColor3 = theme.textbox_text,
 							PlaceholderText = placeholdertext or "Value",
 							TextSize = 13,
-                            TextXAlignment = Enum.TextXAlignment.Center,
-                            ClearTextOnFocus = false
+							TextXAlignment = Enum.TextXAlignment.Center,
+							ClearTextOnFocus = false
 						})
 
 						cheat.background.MouseEnter:Connect(function()
@@ -1067,12 +1067,12 @@ function finity.new(isdark, gprojectName, thinProject)
 								end)
 
 								if not s then warn("error: "..e) end
-                            end
-                        end)
-                        function cheat:SetValue(value)
-                            cheat.value = tostring(value)
-                            cheat.textbox.Text = tostring(value)
-                        end
+							end
+						end)
+						function cheat:SetValue(value)
+							cheat.value = tostring(value)
+							cheat.textbox.Text = tostring(value)
+						end
 
 						cheat.background.Parent = cheat.container
 						cheat.textbox.Parent = cheat.container
@@ -1081,10 +1081,10 @@ function finity.new(isdark, gprojectName, thinProject)
 
 						local suffix = data.suffix or ""
 						local minimum = data.min or 0
-                        local maximum = data.max or 1
-                        local default = data.default
-                        local precise = data.precise
-						
+						local maximum = data.max or 1
+						local default = data.default
+						local precise = data.precise
+
 						local moveconnection
 						local releaseconnection
 
@@ -1131,41 +1131,41 @@ function finity.new(isdark, gprojectName, thinProject)
 							ScaleType = Enum.ScaleType.Slice,
 							SliceCenter = Rect.new(100, 100, 100, 100),
 							SliceScale = 0.02
-                        })
+						})
 
-                        if data.default then
-                            local size = math.clamp(data.default - cheat.sliderbar.AbsolutePosition.X, 0, 150)
+						if data.default then
+							local size = math.clamp(data.default - cheat.sliderbar.AbsolutePosition.X, 0, 150)
 							local percent = size / 150
 							local perc = default/maximum
-                            cheat.value = math.floor((minimum + (maximum - minimum) * percent) * 100) / 100
-                            finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
+							cheat.value = math.floor((minimum + (maximum - minimum) * percent) * 100) / 100
+							finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
 								Size = UDim2.new(perc, 0, 1, 0),
-                            }):Play()
-                            if callback then
+							}):Play()
+							if callback then
 								local s, e = pcall(function()
 									callback(cheat.value)
 								end)
 
 								if not s then warn("error: ".. e) end
 							end
-                        end
+						end
 
-                        function cheat:SetValue(value)
-                            local size = math.clamp(value - cheat.sliderbar.AbsolutePosition.X, 0, 150)
+						function cheat:SetValue(value)
+							local size = math.clamp(value - cheat.sliderbar.AbsolutePosition.X, 0, 150)
 							local percent = size / 150
 							local perc = default/maximum
-                            cheat.value = math.floor((minimum + (maximum - minimum) * percent) * 100) / 100
-                            finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
+							cheat.value = math.floor((minimum + (maximum - minimum) * percent) * 100) / 100
+							finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
 								Size = UDim2.new(perc, 0, 1, 0),
-                            }):Play()
-                            if callback then
+							}):Play()
+							if callback then
 								local s, e = pcall(function()
 									callback(cheat.value)
 								end)
 
 								if not s then warn("error: ".. e) end
 							end
-                        end
+						end
 
 						cheat.sliderbar.MouseButton1Down:Connect(function()
 							local size = math.clamp(mouse.X - cheat.sliderbar.AbsolutePosition.X, 0, 150)
@@ -1212,12 +1212,12 @@ function finity.new(isdark, gprojectName, thinProject)
 								end
 
 								if callback then
-                                    local s, e = pcall(function()
-                                        if data.precise then
-                                            callback(math.ceil(cheat.value))
-                                        else
-                                            callback(cheat.value)
-                                        end
+									local s, e = pcall(function()
+										if data.precise then
+											callback(math.ceil(cheat.value))
+										else
+											callback(cheat.value)
+										end
 									end)
 
 									if not s then warn("error: ".. e) end
@@ -1225,14 +1225,14 @@ function finity.new(isdark, gprojectName, thinProject)
 
 								finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
 									Size = UDim2.new(size / 150, 0, 1, 0),
-								ImageColor3 = theme.slider_color_sliding
-                                }):Play()
-                                
-                                local Position = UDim2.new(size / 150, 5, 0.5, 0);
+									ImageColor3 = theme.slider_color_sliding
+								}):Play()
 
-                                if Position.Width.Scale >= 0.6 then
-                                    Position = UDim2.new(1, -cheat.numbervalue.TextBounds.X, 0.5, 10);
-                                end
+								local Position = UDim2.new(size / 150, 5, 0.5, 0);
+
+								if Position.Width.Scale >= 0.6 then
+									Position = UDim2.new(1, -cheat.numbervalue.TextBounds.X, 0.5, 10);
+								end
 
 								finity.gs["TweenService"]:Create(cheat.numbervalue, TweenInfo.new(0.1), {
 									Position = Position,
@@ -1304,7 +1304,7 @@ function finity.new(isdark, gprojectName, thinProject)
 						end)
 						cheat.button.MouseButton1Up:Connect(function()
 							finity.gs["TweenService"]:Create(cheat.background, TweenInfo.new(0.2), {ImageColor3 = theme.button_background}):Play()
-							
+
 							if callback then
 								local s, e = pcall(function()
 									callback()
@@ -1312,26 +1312,26 @@ function finity.new(isdark, gprojectName, thinProject)
 
 								if not s then warn("error: ".. e) end
 							end
-                        end)
-                        
-                        function cheat:Fire()
-                            if callback then
+						end)
+
+						function cheat:Fire()
+							if callback then
 								local s, e = pcall(function()
 									callback()
 								end)
 
 								if not s then warn("error: ".. e) end
 							end
-                        end
+						end
 
 						cheat.background.Parent = cheat.container
 						cheat.button.Parent = cheat.container
-					
+
 					elseif string.lower(kind) == "keybind" or string.lower(kind) == "bind" then
-                        local callback_bind = data and data.bind
+						local callback_bind = data and data.bind
 						local connection
 						cheat.holding = false
-						
+
 						cheat.background = finity:Create("ImageLabel", {
 							Name = "Background",
 							BackgroundColor3 = Color3.new(1, 1, 1),
@@ -1368,14 +1368,14 @@ function finity.new(isdark, gprojectName, thinProject)
 						end)
 						cheat.button.MouseButton1Down:Connect(function()
 							finity.gs["TweenService"]:Create(cheat.background, TweenInfo.new(0.2), {ImageColor3 = theme.button_background_down}):Play()
-                        end)
-                        cheat.button.MouseButton2Down:Connect(function()
+						end)
+						cheat.button.MouseButton2Down:Connect(function()
 							finity.gs["TweenService"]:Create(cheat.background, TweenInfo.new(0.2), {ImageColor3 = theme.button_background_down}):Play()
 						end)
 						cheat.button.MouseButton1Up:Connect(function()
 							finity.gs["TweenService"]:Create(cheat.background, TweenInfo.new(0.2), {ImageColor3 = theme.button_background}):Play()
 							cheat.button.Text = "Press key..."
-							
+
 							if connection then
 								connection:Disconnect()
 								connection = nil
@@ -1385,12 +1385,12 @@ function finity.new(isdark, gprojectName, thinProject)
 							connection = finity.gs["UserInputService"].InputBegan:Connect(function(Input)
 								if Input.UserInputType.Name == "Keyboard" and Input.KeyCode ~= finityData.ToggleKey and Input.KeyCode ~= Enum.KeyCode.Backspace then
 									cheat.button.Text = "Bound to " .. tostring(Input.KeyCode.Name)
-									
-                                    if connection then
-                                        connection:Disconnect()
-                                        connection = nil
-                                    end
-									
+
+									if connection then
+										connection:Disconnect()
+										connection = nil
+									end
+
 									delay(0, function()
 										callback_bind = Input.KeyCode
 										cheat.value = Input.KeyCode
@@ -1399,7 +1399,7 @@ function finity.new(isdark, gprojectName, thinProject)
 											local s, e = pcall(function()
 												callback(Input.KeyCode)
 											end)
-			
+
 											if not s then warn("error: ".. e) end
 										end
 									end)
@@ -1413,7 +1413,7 @@ function finity.new(isdark, gprojectName, thinProject)
 											local s, e = pcall(function()
 												callback()
 											end)
-			
+
 											if not s then warn("error: ".. e) end
 										end
 									end)
@@ -1426,8 +1426,8 @@ function finity.new(isdark, gprojectName, thinProject)
 								end
 							end)
 						end)
-						
-                        cheat.button.MouseButton2Up:Connect(function()
+
+						cheat.button.MouseButton2Up:Connect(function()
 							finity.gs["TweenService"]:Create(cheat.background, TweenInfo.new(0.2), {ImageColor3 = theme.button_background}):Play()
 							cheat.value = nil
 							callback_bind = nil
@@ -1439,22 +1439,22 @@ function finity.new(isdark, gprojectName, thinProject)
 									local s, e = pcall(function()
 										callback()
 									end)
-	
+
 									if not s then warn("error: ".. e) end
 								end
 							end)
-							
-                            if connection then
-                                connection:Disconnect()
-                                connection = nil
-                            end
+
+							if connection then
+								connection:Disconnect()
+								connection = nil
+							end
 						end)
-                        
-                        function cheat:SetValue(value)
-                            cheat.value = tostring(value)
-                            cheat.button.Text = "Bound to " .. tostring(value)
-                        end
-						
+
+						function cheat:SetValue(value)
+							cheat.value = tostring(value)
+							cheat.button.Text = "Bound to " .. tostring(value)
+						end
+
 						finity.gs["UserInputService"].InputBegan:Connect(function(Input, Process)
 							if callback_bind and Input.KeyCode == callback_bind and not Process then
 								cheat.holding = true
@@ -1462,7 +1462,7 @@ function finity.new(isdark, gprojectName, thinProject)
 									local s, e = pcall(function()
 										callback(Input.KeyCode)
 									end)
-	
+
 									if not s then warn("error: ".. e) end
 								end
 							end
@@ -1472,7 +1472,7 @@ function finity.new(isdark, gprojectName, thinProject)
 								cheat.holding = true
 							end
 						end)
-						
+
 						if callback_bind then
 							cheat.button.Text = "Bound to " .. tostring(callback_bind.Name)
 						end
@@ -1495,22 +1495,22 @@ function finity.new(isdark, gprojectName, thinProject)
 
 			return sector
 		end
-		
+
 		firstCategory = false
-		
+
 		return category
 	end
 
 	self:addShadow(self2.container, 0)
 
 	self2.categories.ClipsDescendants = true
-	
+
 	if not finity.gs["RunService"]:IsStudio() then
 		self2.userinterface.Parent = self.gs["CoreGui"]
 	else
 		self2.userinterface.Parent = self.gs["Players"].LocalPlayer:WaitForChild("PlayerGui")
 	end
-	
+
 	self2.container.Parent = self2.userinterface
 	self2.categories.Parent = self2.container
 	self2.sidebar.Parent = self2.container
