@@ -215,7 +215,7 @@ function finity.new(isdark, gprojectName, thinProject)
 		BackgroundTransparency = 0,
 		BackgroundColor3 = theme.main_container,
 		BorderSizePixel = 0,
-		Position = UDim2.new(0.5, 0, 0.5, 0),
+		Position = UDim2.new(0.5, 0, 1.5, 0),
 		Size = ContainerSize,
 		ZIndex = 2,
 		ImageTransparency = 1
