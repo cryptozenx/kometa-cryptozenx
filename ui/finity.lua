@@ -1137,10 +1137,9 @@ function finity.new(isdark, gprojectName, thinProject)
 						if data.default then
 							local size = math.clamp(data.default - cheat.sliderbar.AbsolutePosition.X, 0, 150)
 							local percent = size / 150
-							local perc = default/maximum
 							cheat.value = math.floor((minimum + (maximum - minimum) * percent) * 100) / 100
 							finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
-								Size = UDim2.new(perc, 0, 1, 0),
+								Size = UDim2.new(math.clamp(default / maximum, 0, 1) or 0.5, 0, 1, 0),
 							}):Play()
 							if callback then
 								local s, e = pcall(function()
@@ -1154,10 +1153,9 @@ function finity.new(isdark, gprojectName, thinProject)
 						function cheat:SetValue(value)
 							local size = math.clamp(value - cheat.sliderbar.AbsolutePosition.X, 0, 150)
 							local percent = size / 150
-							local perc = default/maximum
 							cheat.value = math.floor((minimum + (maximum - minimum) * percent) * 100) / 100
 							finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
-								Size = UDim2.new(perc, 0, 1, 0),
+								Size = UDim2.new(math.clamp(default / maximum, 0, 1) or 0.5, 0, 1, 0),
 							}):Play()
 							if callback then
 								local s, e = pcall(function()
