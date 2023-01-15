@@ -808,7 +808,7 @@ function finity.new(isdark, gprojectName, thinProject)
 							ZIndex = 2,
 							Image = "rbxassetid://3570695787",
 							ImageColor3 = theme.dropdown_background,
-							ImageTransparency = 0.5,
+							ImageTransparency = 0.2,
 							ScaleType = Enum.ScaleType.Slice,
 							SliceCenter = Rect.new(100, 100, 100, 100),
 							SliceScale = 0.02
@@ -830,8 +830,8 @@ function finity.new(isdark, gprojectName, thinProject)
 
 						cheat.list = finity:Create("ScrollingFrame", {
 							Name = "List",
-							BackgroundColor3 = theme.dropdown_background,
-							BackgroundTransparency = 0.5,
+							BackgroundColor3 = Color3.fromRGB(62, 70, 134),
+							BackgroundTransparency = 0,
 							BorderSizePixel = 0,
 							Position = UDim2.new(0, 0, 1, 0),
 							Size = UDim2.new(1, 0, 0, 100),
