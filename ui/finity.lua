@@ -533,6 +533,7 @@ function finity.new(isdark, gprojectName, thinProject)
 			function sector:Cheat(kind, name, callback, data)
 				local cheat = {}
 				cheat.value = nil
+				cheat.kind = kind
 
 				cheat.frame = finity:Create("Frame", {
 					Name = name,
