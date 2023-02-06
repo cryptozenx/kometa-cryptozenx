@@ -426,7 +426,7 @@ function finity.new(isdark, gprojectName, thinProject)
 				end
 
 				largestListSize = largestListSize + 200
-				
+
 				category.container.CanvasSize = UDim2.new(0, 0, 0, largestListSize + 5)
 			end
 
@@ -947,7 +947,7 @@ function finity.new(isdark, gprojectName, thinProject)
 									end
 								end
 
-								finity.gs["TweenService"]:Create(cheat.list, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, math.clamp(cheat.list["UIListLayout"].AbsoluteContentSize.Y, 0, 150)), Position = UDim2.new(0, 0, 1, 0), ScrollBarImageTransparency = 0, BackgroundTransparency = 0}):Play()
+								finity.gs["TweenService"]:Create(cheat.list, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, math.clamp(cheat.list["UIListLayout"].AbsoluteContentSize.Y, 0, 150)), Position = UDim2.new(0, 0, 1, 0), ScrollBarImageTransparency = 0, BackgroundTransparency = 0.5}):Play()
 							else
 								for _, button in next, cheat.list:GetChildren() do
 									if button:IsA("TextButton") then
@@ -1008,6 +1008,229 @@ function finity.new(isdark, gprojectName, thinProject)
 								end)
 
 								if not s then warn("error: ".. e) end
+							end
+						end
+
+						cheat.selected.Parent = cheat.dropdown
+						cheat.dropdown.Parent = cheat.container
+						cheat.list.Parent = cheat.container
+					elseif string.lower(kind) == 'multidropdown' then
+						if data then
+							if data.default then
+								cheat.value = data.default
+							elseif data.options then
+								cheat.value = data.options[1]
+							else
+								cheat.value = "None"
+							end
+						end
+						
+						cheat.value = {}
+						cheat.buttons = {}
+
+						local options
+
+						if data and data.options then
+							options = data.options
+						end
+
+						cheat.dropped = false
+
+						cheat.dropdown = finity:Create("ImageButton", {
+							Name = "MultiDropDown",
+							BackgroundColor3 = Color3.new(1, 1, 1),
+							BackgroundTransparency = 1,
+							Size = UDim2.new(1, 0, 1, 0),
+							ZIndex = 2,
+							Image = "rbxassetid://3570695787",
+							ImageColor3 = theme.dropdown_background,
+							ImageTransparency = 0.2,
+							ScaleType = Enum.ScaleType.Slice,
+							SliceCenter = Rect.new(100, 100, 100, 100),
+							SliceScale = 0.02
+						})
+
+						cheat.selected = finity:Create("TextLabel", {
+							Name = "Selected",
+							BackgroundColor3 = Color3.new(1, 1, 1),
+							BackgroundTransparency = 1,
+							Position = UDim2.new(0, 10, 0, 0),
+							Size = UDim2.new(1, -35, 1, 0),
+							ZIndex = 2,
+							Font = Enum.Font.Gotham,
+							Text = 'None',
+							TextColor3 = theme.dropdown_text,
+							TextSize = 13,
+							TextXAlignment = Enum.TextXAlignment.Left
+						})
+
+						cheat.list = finity:Create("ScrollingFrame", {
+							Name = "List",
+							BackgroundColor3 = Color3.fromRGB(62, 70, 134),
+							BackgroundTransparency = 0,
+							BorderSizePixel = 0,
+							Position = UDim2.new(0, 0, 1, 0),
+							Size = UDim2.new(1, 0, 0, 100),
+							ZIndex = 3,
+							BottomImage = "rbxassetid://967852042",
+							MidImage = "rbxassetid://967852042",
+							TopImage = "rbxassetid://967852042",
+							ScrollBarThickness = 4,
+							VerticalScrollBarInset = Enum.ScrollBarInset.None,
+							ScrollBarImageColor3 = theme.dropdown_scrollbar_color
+						})
+
+						local uilistlayout = finity:Create("UIListLayout", {
+							SortOrder = Enum.SortOrder.LayoutOrder,
+							Padding = UDim.new(0, 2)
+						})
+						uilistlayout.Parent = cheat.list
+						uilistlayout = nil
+						local uipadding = finity:Create("UIPadding", {
+							PaddingLeft = UDim.new(0, 2)
+						})
+						uipadding.Parent = cheat.list
+						uipadding = nil
+
+						local function refreshOptions()
+							if cheat.dropped then
+								cheat.fadelist()
+							end	
+
+							for _, child in next, cheat.list:GetChildren() do
+								if child:IsA("TextButton") then
+									child:Destroy()
+								end
+							end
+
+							for _, value in next, options do
+								local button = finity:Create("TextButton", {
+									BackgroundColor3 = Color3.new(1, 1, 1),
+									BackgroundTransparency = 1,
+									Size = UDim2.new(1, 0, 0, 20),
+									ZIndex = 3,
+									Font = Enum.Font.Gotham,
+									Text = value,
+									TextColor3 = theme.dropdown_text,
+									TextSize = 13
+								})
+								
+								table.insert(cheat.buttons, button)
+								button.Parent = cheat.list
+
+								button.MouseButton1Click:Connect(function()
+									if cheat.dropped then
+										if table.find(cheat.value, value) then
+											table.remove(cheat.value, table.find(cheat.value, value))
+											finity.gs["TweenService"]:Create(button, TweenInfo.new(0.35), {TextColor3 = theme.dropdown_text}):Play()
+										else
+											table.insert(cheat.value, value)
+											finity.gs["TweenService"]:Create(button, TweenInfo.new(0.35), {TextColor3 = Color3.new(0, 1, 0.5)}):Play()
+										end
+
+										--cheat.fadelist()
+
+										if callback then
+											local s, e = pcall(function()
+												callback(cheat.value)
+											end)
+
+											if not s then warn("error: ".. e) end
+										end
+										if #cheat.value > 0 then
+											cheat.selected.Text = #cheat.value.." Enabled"
+										else
+											cheat.selected.Text = 'None'
+										end
+									end
+								end)
+
+
+								finity.gs["TweenService"]:Create(button, TweenInfo.new(0), {TextTransparency = 1}):Play()
+							end
+
+							finity.gs["TweenService"]:Create(cheat.list, TweenInfo.new(0), {Size = UDim2.new(1, 0, 0, 0), Position = UDim2.new(0, 0, 1, 0), CanvasSize = UDim2.new(0, 0, 0, cheat.list["UIListLayout"].AbsoluteContentSize.Y), ScrollBarImageTransparency = 1, BackgroundTransparency = 1}):Play()
+						end
+
+
+						function cheat.fadelist()
+							cheat.dropped = not cheat.dropped
+
+							if cheat.dropped then
+								for _, button in next, cheat.list:GetChildren() do
+									if button:IsA("TextButton") then
+										finity.gs["TweenService"]:Create(button, TweenInfo.new(0.2), {TextTransparency = 0}):Play()
+									end
+								end
+
+								finity.gs["TweenService"]:Create(cheat.list, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, math.clamp(cheat.list["UIListLayout"].AbsoluteContentSize.Y, 0, 150)), Position = UDim2.new(0, 0, 1, 0), ScrollBarImageTransparency = 0, BackgroundTransparency = 0}):Play()
+							else
+								for _, button in next, cheat.list:GetChildren() do
+									if button:IsA("TextButton") then
+										finity.gs["TweenService"]:Create(button, TweenInfo.new(0.2), {TextTransparency = 1}):Play()
+									end
+								end
+
+								finity.gs["TweenService"]:Create(cheat.list, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, 0), Position = UDim2.new(0, 0, 1, 0), ScrollBarImageTransparency = 1, BackgroundTransparency = 1}):Play()
+							end
+						end
+
+						cheat.dropdown.MouseEnter:Connect(function()
+							finity.gs["TweenService"]:Create(cheat.selected, TweenInfo.new(0.1), {TextColor3 = theme.dropdown_text_hover}):Play()
+						end)
+						cheat.dropdown.MouseLeave:Connect(function()
+							finity.gs["TweenService"]:Create(cheat.selected, TweenInfo.new(0.1), {TextColor3 = theme.dropdown_text}):Play()
+						end)
+						cheat.dropdown.MouseButton1Click:Connect(function()
+							cheat.fadelist()
+						end)
+
+						refreshOptions()
+
+						function cheat:RemoveOption(value)
+							local removed = false
+							for index, option in next, options do
+								if option == value then
+									table.remove(options, index)
+									removed = true
+									break
+								end
+							end
+
+							if removed then
+								refreshOptions()
+							end
+
+							return removed
+						end
+
+						function cheat:AddOption(value)
+							table.insert(options, value)
+
+							refreshOptions()
+						end
+
+						function cheat:SetValue(value)
+							--cheat.selected.Text = value
+							cheat.value = value
+							
+							for i,v in ipairs(cheat.buttons) do
+								if table.find(cheat.value, v.Text) then
+									finity.gs["TweenService"]:Create(v, TweenInfo.new(0.35), {TextColor3 = Color3.new(0, 1, 0.5)}):Play()
+								end
+							end
+
+							if callback then
+								local s, e = pcall(function()
+									callback(cheat.value)
+								end)
+
+								if not s then warn("error: ".. e) end
+							end
+							if #cheat.value > 0 then
+								cheat.selected.Text = #cheat.value.." Enabled"
+							else
+								cheat.selected.Text = 'None'
 							end
 						end
 
