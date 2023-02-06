@@ -947,7 +947,7 @@ function finity.new(isdark, gprojectName, thinProject)
 									end
 								end
 
-								finity.gs["TweenService"]:Create(cheat.list, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, math.clamp(cheat.list["UIListLayout"].AbsoluteContentSize.Y, 0, 150)), Position = UDim2.new(0, 0, 1, 0), ScrollBarImageTransparency = 0, BackgroundTransparency = 0.5}):Play()
+								finity.gs["TweenService"]:Create(cheat.list, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, math.clamp(cheat.list["UIListLayout"].AbsoluteContentSize.Y, 0, 150)), Position = UDim2.new(0, 0, 1, 0), ScrollBarImageTransparency = 0, BackgroundTransparency = 0}):Play()
 							else
 								for _, button in next, cheat.list:GetChildren() do
 									if button:IsA("TextButton") then
@@ -1248,7 +1248,7 @@ function finity.new(isdark, gprojectName, thinProject)
 							ZIndex = 2,
 							Image = "rbxassetid://3570695787",
 							ImageColor3 = theme.textbox_background,
-							ImageTransparency = 0.5,
+							ImageTransparency = 0,
 							ScaleType = Enum.ScaleType.Slice,
 							SliceCenter = Rect.new(100, 100, 100, 100),
 							SliceScale = 0.02
@@ -1499,7 +1499,7 @@ function finity.new(isdark, gprojectName, thinProject)
 							ZIndex = 2,
 							Image = "rbxassetid://3570695787",
 							ImageColor3 = theme.button_background,
-							ImageTransparency = 0.5,
+							ImageTransparency = 0,
 							ScaleType = Enum.ScaleType.Slice,
 							SliceCenter = Rect.new(100, 100, 100, 100),
 							SliceScale = 0.02
@@ -1660,7 +1660,7 @@ function finity.new(isdark, gprojectName, thinProject)
 							cheat.button.Text = "Click to Bind"
 							cheat.holding = false
 
-							delay(0, function()
+							task.delay(0, function()
 								if callback then
 									local s, e = pcall(function()
 										callback()
