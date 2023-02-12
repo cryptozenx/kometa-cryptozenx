@@ -535,6 +535,10 @@ function finity.new(isdark, gprojectName, thinProject)
 			uilistlayout = nil
 
 			function sector:Cheat(kind, name, callback, data)
+				if not data then
+					data = {}
+				end
+				
 				local cheat = {}
 				cheat.value = nil
 				cheat.kind = kind
