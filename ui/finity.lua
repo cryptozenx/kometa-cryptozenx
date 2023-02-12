@@ -1349,7 +1349,7 @@ function finity.new(isdark, gprojectName, thinProject)
 							Text = "",
 							TextTransparency = 1,
 							TextColor3 = theme.slider_text,
-							TextSize = data.text_scale or 13,
+							TextSize = 13,
 						})
 
 						cheat.visiframe = finity:Create("ImageLabel", {
