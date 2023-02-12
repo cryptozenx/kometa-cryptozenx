@@ -515,7 +515,7 @@ function finity.new(isdark, gprojectName, thinProject)
 				BackgroundTransparency = 1,
 				Size = UDim2.new(1, -5, 0, 23),
 				ZIndex = 2,
-				Font = Enum.Font.GothamSemibold,
+				Font = Enum.Font.GothamBold,
 				TextColor3 = theme.sector_text_color,
 				TextSize = 16,
 				TextXAlignment = Enum.TextXAlignment.Left,
@@ -553,9 +553,9 @@ function finity.new(isdark, gprojectName, thinProject)
 					BackgroundTransparency = 1,
 					Size = UDim2.new(1, 0, 1, 0),
 					ZIndex = 2,
-					Font = Enum.Font.Gotham,
+					Font = Enum.Font.GothamBold,
 					TextColor3 = theme.text_color,
-					TextSize = 13,
+					TextSize = data.text_scale or 13,
 					Text = name,
 					TextXAlignment = Enum.TextXAlignment.Left
 				})
@@ -1024,7 +1024,7 @@ function finity.new(isdark, gprojectName, thinProject)
 								cheat.value = "None"
 							end
 						end
-						
+
 						cheat.value = {}
 						cheat.buttons = {}
 
@@ -1114,7 +1114,7 @@ function finity.new(isdark, gprojectName, thinProject)
 									TextColor3 = theme.dropdown_text,
 									TextSize = 13
 								})
-								
+
 								table.insert(cheat.buttons, button)
 								button.Parent = cheat.list
 
@@ -1213,7 +1213,7 @@ function finity.new(isdark, gprojectName, thinProject)
 						function cheat:SetValue(value)
 							--cheat.selected.Text = value
 							cheat.value = value
-							
+
 							for i,v in ipairs(cheat.buttons) do
 								if table.find(cheat.value, v.Text) then
 									finity.gs["TweenService"]:Create(v, TweenInfo.new(0.35), {TextColor3 = Color3.new(0, 1, 0.5)}):Play()
@@ -1364,9 +1364,9 @@ function finity.new(isdark, gprojectName, thinProject)
 						if data.default then
 							local size = math.clamp(data.default - cheat.sliderbar.AbsolutePosition.X, 0, 150)
 							local percent = size / 150
-							cheat.value = math.floor((minimum + (maximum - minimum) * percent) * 100) / 100
+                            cheat.value = data.default
 							finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
-								Size = UDim2.new(math.clamp(default / maximum, 0, 1) or 0.5, 0, 1, 0),
+								Size = UDim2.new(percent or 0.5, 0, 1, 0),
 							}):Play()
 							if callback then
 								local s, e = pcall(function()
@@ -1378,20 +1378,19 @@ function finity.new(isdark, gprojectName, thinProject)
 						end
 
 						function cheat:SetValue(value)
-							local size = math.clamp(value - cheat.sliderbar.AbsolutePosition.X, 0, 150)
-							local percent = size / 150
-							cheat.value = math.floor((minimum + (maximum - minimum) * percent) * 100) / 100
-							finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
-								Size = UDim2.new(math.clamp(default / maximum, 0, 1) or 0.5, 0, 1, 0),
-							}):Play()
-							if callback then
+                            local size = value
+							cheat.value = value
+                            finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
+								Size = UDim2.new(size / maximum, 0, 1, 0),
+                            }):Play()
+                            if callback then
 								local s, e = pcall(function()
 									callback(cheat.value)
 								end)
 
 								if not s then warn("error: ".. e) end
 							end
-						end
+                        end
 
 						cheat.sliderbar.MouseButton1Down:Connect(function()
 							local size = math.clamp(mouse.X - cheat.sliderbar.AbsolutePosition.X, 0, 150)
@@ -1566,7 +1565,7 @@ function finity.new(isdark, gprojectName, thinProject)
 							ZIndex = 2,
 							Image = "rbxassetid://3570695787",
 							ImageColor3 = theme.button_background,
-							ImageTransparency = 0.5,
+							ImageTransparency = 0,
 							ScaleType = Enum.ScaleType.Slice,
 							SliceCenter = Rect.new(100, 100, 100, 100),
 							SliceScale = 0.02
