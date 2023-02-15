@@ -24,7 +24,7 @@ local API = {} do
     end
 
     function API:Player() -- returns the player
-        return game:GetService('Players').LocalPlayer
+        return game:GetService("Players").LocalPlayer
     end
     
     function API:Character() -- returns the player character
@@ -41,14 +41,16 @@ local API = {} do
     
     function API:Tween(Time, CF) -- tween to position
         pcall(function()
-            game:GetService('TweenService'):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Time, Enum.EasingStyle.Linear), {CFrame = CF}):Play() 
+            self:Humanoid():ChangeState(11)
+            game:GetService("TweenService"):Create(self:Root(), TweenInfo.new(Time, Enum.EasingStyle.Linear), { CFrame = CF }):Play() 
             task.wait(Time)
         end)
     end
 
     function API:TweenNoDelay(Time, CF) -- tween to position without delay
         pcall(function()
-            game:GetService('TweenService'):Create(game.Players.LocalPlayer.Character.HumanoidRootPart, TweenInfo.new(Time, Enum.EasingStyle.Linear), {CFrame = CF}):Play() 
+            self:Humanoid():ChangeState(11)
+            game:GetService("TweenService"):Create(self:Root(), TweenInfo.new(Time, Enum.EasingStyle.Linear), { CFrame = CF }):Play() 
         end)
     end
     
@@ -64,28 +66,9 @@ local API = {} do
         return (Pos1 - Pos2).Magnitude
     end
     
-    function API:Pathfind(Position)
-        local PathfindingService = game:GetService("PathfindingService")
-        local Humanoid = self:Humanoid()
-        local Root = self:Root()
-        local Path = PathfindingService:CreatePath({
-            AgentCanJump = true,
-            WaypointSpacing = 1
-        })
-        Path:ComputeAsync(Root.Position, Position)
-        local waypoints = Path:GetWaypoints()
-        for i, waypoint in ipairs(waypoints) do
-            Humanoid:MoveTo(waypoint.Position)
-            Humanoid.MoveToFinished:Wait()
-            if waypoint.Action == Enum.PathWaypointAction.Jump then
-                Humanoid.Jump = true
-            end
-        end
-    end
-    
     function API:Notify(Title, Description, Duration) -- send notification
         pcall(function()
-            game:GetService('StarterGui'):SetCore("SendNotification", {
+            game:GetService("StarterGui"):SetCore("SendNotification", {
                 Title = Title;
                 Text = Description;
                 Duration = Duration;
@@ -159,22 +142,22 @@ local API = {} do
     function API:ImageHook(Hook, Description, Title, Image) -- send webhook
         pcall(function()
             local Embed = {
-                color = '3454955';
-                title =  Title;
-                description = Description;
+                color = "3454955",
+                title =  Title,
+                description = Description,
                 thumbnail = {
-                    url = Image;
-                };
-            };
+                    url = Image
+                },
+            }
     
             (syn and syn.request or http_request) {
-                Url = Hook;
-                Method = 'POST';
+                Url = Hook,
+                Method = "POST",
                 Headers = {
-                    ['Content-Type'] = 'application/json';
-                };
-                Body = game:GetService('HttpService'):JSONEncode( { content = Content; embeds = { Embed } } );
-            };
+                    ["Content-Type"] = "application/json"
+                },
+                Body = game:GetService("HttpService"):JSONEncode( { content = Content; embeds = { Embed } } ),
+            }
         end)
     end
 
