@@ -41,7 +41,6 @@ local API = {} do
     
     function API:Tween(Time, CF) -- tween to position
         pcall(function()
-            self:Humanoid():ChangeState(11)
             game:GetService("TweenService"):Create(self:Root(), TweenInfo.new(Time, Enum.EasingStyle.Linear), { CFrame = CF }):Play() 
             task.wait(Time)
         end)
@@ -49,7 +48,6 @@ local API = {} do
 
     function API:TweenNoDelay(Time, CF) -- tween to position without delay
         pcall(function()
-            self:Humanoid():ChangeState(11)
             game:GetService("TweenService"):Create(self:Root(), TweenInfo.new(Time, Enum.EasingStyle.Linear), { CFrame = CF }):Play() 
         end)
     end
