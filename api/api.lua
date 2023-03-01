@@ -1,5 +1,14 @@
 local API = {} do
 
+    function API:Load()
+        API.Services = {}
+        setmetatable(API.Services, {
+            __index = function(_, Service_Name)
+                return game:GetService(Service_Name)
+            end
+        })
+    end
+
     function API:Properties(Table, Property) 
         local PropertiesTable = {}
         for _, Instance in next, Table do
@@ -26,19 +35,19 @@ local API = {} do
     function API:Player() -- returns the player
         return game:GetService("Players").LocalPlayer
     end
-    
+
     function API:Character() -- returns the player character
         return self:Player().Character
     end
-    
+
     function API:Root() -- returns the player humanoid root
         return self:Character():WaitForChild("HumanoidRootPart")
     end
-    
+
     function API:Humanoid() -- returns the humanoid
         return self:Character():WaitForChild("Humanoid")
     end
-    
+
     function API:Tween(Time, CF) -- tween to position
         pcall(function()
             game:GetService("TweenService"):Create(self:Root(), TweenInfo.new(Time, Enum.EasingStyle.Linear), { CFrame = CF }):Play() 
@@ -51,19 +60,19 @@ local API = {} do
             game:GetService("TweenService"):Create(self:Root(), TweenInfo.new(Time, Enum.EasingStyle.Linear), { CFrame = CF }):Play() 
         end)
     end
-    
+
     function API:WalkTo(Position) -- walk to position
         self:Humanoid():MoveTo(Position)
     end
-    
+
     function API:Teleport(CFrame) -- teleport to position
         self:Root().CFrame = CFrame
     end
-    
+
     function API:Magnitude(Pos1, Pos2) -- return positions magnitude
         return (Pos1 - Pos2).Magnitude
     end
-    
+
     function API:Notify(Title, Description, Duration) -- send notification
         pcall(function()
             game:GetService("StarterGui"):SetCore("SendNotification", {
@@ -73,7 +82,7 @@ local API = {} do
             })
         end)
     end
-    
+
     function API:ToHMS(Time) -- return time string
         local Minutes = (Time - Time % 60) / 60
         Time -= Minutes * 60
@@ -81,7 +90,7 @@ local API = {} do
         Minutes -= Hours * 60
         return string.format("%02i", Hours)..":"..string.format("%02i", Minutes)..":"..string.format("%02i", Time)
     end
-    
+
     function API:SuffixString(String) -- return suffix string
         local Suffixes = {"k", "m", "b", "t", "q", "Q", "sx", "sp", "o", "n", "d"}
         for Index = #Suffixes, 1, -1 do
@@ -92,7 +101,7 @@ local API = {} do
         end
         return tostring(String)
     end
-    
+
     function API:TableFind(Table, Value) -- return index
         for index, value in next, Table do
             if value == Value then
@@ -100,7 +109,7 @@ local API = {} do
             end
         end
     end
-    
+
     function API:FindValue(Table, Value) -- return boolean
         if type(Table) == "table" then
             for _, value in next, Table do
@@ -113,7 +122,7 @@ local API = {} do
         end
         return false
     end
-    
+
     function API:GetPartWithName(Name, Path) -- return part
         for _, Object in next, Path:GetChildren() do
             if (Object.Name:match(Name)) then
@@ -121,7 +130,7 @@ local API = {} do
             end
         end
     end
-    
+
     function API:GetBiggestModel(Path) -- return biggest part
         local Part
         for _, Object in next, Path:GetChildren() do
@@ -136,7 +145,7 @@ local API = {} do
         end
         return Part
     end
-    
+
     function API:ImageHook(Hook, Description, Title, Image) -- send webhook
         pcall(function()
             local Embed = {
@@ -147,7 +156,7 @@ local API = {} do
                     url = Image
                 },
             }
-    
+
             (syn and syn.request or http_request) {
                 Url = Hook,
                 Method = "POST",
