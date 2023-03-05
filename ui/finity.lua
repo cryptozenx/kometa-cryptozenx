@@ -975,6 +975,11 @@ function finity.new(isdark, gprojectName, thinProject)
 
 						refreshOptions()
 
+						function cheat:Clear()
+							table.clear(options)
+							refreshOptions()
+						end
+
 						function cheat:RemoveOption(value)
 							local removed = false
 							for index, option in next, options do
@@ -1370,7 +1375,7 @@ function finity.new(isdark, gprojectName, thinProject)
 							local percent = size / 150
                             cheat.value = data.default
 							finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
-								Size = UDim2.new(data.default/maximum or 0.5, 0, 1, 0),
+								Size = UDim2.new(percent or 0.5, 0, 1, 0),
 							}):Play()
 							if callback then
 								local s, e = pcall(function()
