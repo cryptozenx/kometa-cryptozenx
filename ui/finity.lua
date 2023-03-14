@@ -146,6 +146,35 @@ function finity.new(isdark, gprojectName, thinProject)
 		ToggleKey = Enum.KeyCode.Home,
 	}
 
+	local function SetUpDragging(DragPoint, Main)
+		pcall(function()
+			local Dragging, DragInput, MousePos, FramePos = false, false, false, false
+			DragPoint.InputBegan:Connect(function(Input)
+				if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+					Dragging = true
+					MousePos = Input.Position
+					FramePos = Main.Position
+					Input.Changed:Connect(function()
+						if Input.UserInputState == Enum.UserInputState.End then
+							Dragging = false
+						end
+					end)
+				end
+			end)
+			DragPoint.InputChanged:Connect(function(Input)
+				if Input.UserInputType == Enum.UserInputType.MouseMovement then
+					DragInput = Input
+				end
+			end)
+			finity.gs["UserInputService"].InputChanged:Connect(function(Input)
+				if Input == DragInput and Dragging then
+					local Delta = Input.Position - MousePos
+					finity.gs["TweenService"]:Create(Main, TweenInfo.new(0.15, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), { Position  = UDim2.new(FramePos.X.Scale,FramePos.X.Offset + Delta.X, FramePos.Y.Scale, FramePos.Y.Offset + Delta.Y) }):Play()
+				end
+			end)
+		end)
+	end
+
 	self2.ChangeToggleKey = function(NewKey)
 		finityData.ToggleKey = NewKey
 
@@ -208,7 +237,6 @@ function finity.new(isdark, gprojectName, thinProject)
 	})
 
 	self2.container = self:Create("ImageLabel", {
-		Draggable = true,
 		Active = true,
 		Name = "Container",
 		AnchorPoint = Vector2.new(0.5, 0.5),
@@ -231,7 +259,6 @@ function finity.new(isdark, gprojectName, thinProject)
 		self2.container.Size = thinProject
 	end
 
-	self2.container.Draggable = true
 	self2.container.Active = true
 
 	self2.sidebar = self:Create("Frame", {
@@ -332,6 +359,8 @@ function finity.new(isdark, gprojectName, thinProject)
 	})
 	uilistlayout.Parent = self2.sidebar
 	uilistlayout = nil
+
+	SetUpDragging(self2.topbar, self2.topbar)
 
 	function self2:Category(name)
 		local category = {}
