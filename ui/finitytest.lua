@@ -169,7 +169,7 @@ function finity.new(isdark, gprojectName, thinProject)
 			finity.gs["UserInputService"].InputChanged:Connect(function(Input)
 				if Input == DragInput and Dragging then
 					local Delta = Input.Position - MousePos
-					finity.gs["TweenService"]:Create(Main, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), { Position  = UDim2.new(FramePos.X.Scale,FramePos.X.Offset + Delta.X, FramePos.Y.Scale, FramePos.Y.Offset + Delta.Y) }):Play()
+					finity.gs["TweenService"]:Create(Main, TweenInfo.new(0.15, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), { Position  = UDim2.new(FramePos.X.Scale,FramePos.X.Offset + Delta.X, FramePos.Y.Scale, FramePos.Y.Offset + Delta.Y) }):Play()
 				end
 			end)
 		end)
