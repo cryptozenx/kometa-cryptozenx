@@ -360,7 +360,7 @@ function finity.new(isdark, gprojectName, thinProject)
 	uilistlayout.Parent = self2.sidebar
 	uilistlayout = nil
 
-	SetUpDragging(self2.topbar, self2.topbar)
+	SetUpDragging(self2.topbar, self2.container)
 
 	function self2:Category(name)
 		local category = {}
