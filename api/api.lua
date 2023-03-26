@@ -19,20 +19,6 @@ local API = {} do
         return PropertiesTable
     end
 
-    function API:Create(Class, Properties, Parent)
-        local Object = Instance.new(Class)
-
-        for Property, Value in next, Properties do
-            if Object[Property] then
-                Object[Property] = Value
-            end
-        end
-
-        Object.Parent = Parent or workspace
-
-        return Object
-    end
-
     function API:Sort(Table, Function, ...) 
         table.sort(Table, Function, ...)
         return Table or {}
