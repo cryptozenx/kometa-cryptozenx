@@ -19,7 +19,7 @@ local API = {} do
         return PropertiesTable
     end
 
-    function API:Create(Class, Properties)
+    function API:Create(Class, Properties, Parent)
         local Object = Instance.new(Class)
 
         for Property, Value in next, Properties do
@@ -27,6 +27,8 @@ local API = {} do
                 Object[Property] = Value
             end
         end
+
+        Object.Parent = Parent or workspace
 
         return Object
     end
