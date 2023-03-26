@@ -9,7 +9,7 @@ local API = {} do
         })
     end
 
-    function API:Properties(Table, Property) 
+    function API:Properties(Table, Property)
         local PropertiesTable = {}
         for _, Instance in next, Table do
             if Instance and Instance[Property] then
@@ -17,6 +17,18 @@ local API = {} do
             end
         end
         return PropertiesTable
+    end
+
+    function API:Create(Class, Properties)
+        local Object = Instance.new(Class)
+
+        for Property, Value in next, Properties do
+            if Object[Property] and Property ~= "Parent" then
+                Object[Property] = Value
+            end
+        end
+
+        return Object
     end
 
     function API:Sort(Table, Function, ...) 
@@ -32,48 +44,48 @@ local API = {} do
         return Indexes
     end
 
-    function API:Player() -- returns the player
+    function API:Player()
         return game:GetService("Players").LocalPlayer
     end
 
-    function API:Character() -- returns the player character
+    function API:Character()
         return self:Player().Character
     end
 
-    function API:Root() -- returns the player humanoid root
+    function API:Root()
         return self:Character():WaitForChild("HumanoidRootPart")
     end
 
-    function API:Humanoid() -- returns the humanoid
+    function API:Humanoid()
         return self:Character():WaitForChild("Humanoid")
     end
 
-    function API:Tween(Time, CF) -- tween to position
+    function API:Tween(Time, CF)
         pcall(function()
             game:GetService("TweenService"):Create(self:Root(), TweenInfo.new(Time, Enum.EasingStyle.Linear), { CFrame = CF }):Play() 
             task.wait(Time)
         end)
     end
 
-    function API:TweenNoDelay(Time, CF) -- tween to position without delay
+    function API:TweenNoDelay(Time, CF)
         pcall(function()
             game:GetService("TweenService"):Create(self:Root(), TweenInfo.new(Time, Enum.EasingStyle.Linear), { CFrame = CF }):Play() 
         end)
     end
 
-    function API:WalkTo(Position) -- walk to position
+    function API:WalkTo(Position)
         self:Humanoid():MoveTo(Position)
     end
 
-    function API:Teleport(CFrame) -- teleport to position
+    function API:Teleport(CFrame)
         self:Root().CFrame = CFrame
     end
 
-    function API:Magnitude(Pos1, Pos2) -- return positions magnitude
+    function API:Magnitude(Pos1, Pos2)
         return (Pos1 - Pos2).Magnitude
     end
 
-    function API:Notify(Title, Description, Duration) -- send notification
+    function API:Notify(Title, Description, Duration)
         pcall(function()
             game:GetService("StarterGui"):SetCore("SendNotification", {
                 Title = Title;
@@ -83,7 +95,7 @@ local API = {} do
         end)
     end
 
-    function API:ToHMS(Time) -- return time string
+    function API:ToHMS(Time)
         local Minutes = (Time - Time % 60) / 60
         Time -= Minutes * 60
         local Hours = (Minutes - Minutes % 60) / 60
@@ -91,7 +103,7 @@ local API = {} do
         return string.format("%02i", Hours)..":"..string.format("%02i", Minutes)..":"..string.format("%02i", Time)
     end
 
-    function API:SuffixString(String) -- return suffix string
+    function API:SuffixString(String)
         local Suffixes = {"k", "m", "b", "t", "q", "Q", "sx", "sp", "o", "n", "d"}
         for Index = #Suffixes, 1, -1 do
             local Pow = math.pow(10, Index * 3)
@@ -102,7 +114,7 @@ local API = {} do
         return tostring(String)
     end
 
-    function API:TableFind(Table, Value) -- return index
+    function API:TableFind(Table, Value)
         for index, value in next, Table do
             if value == Value then
                 return index
@@ -110,7 +122,7 @@ local API = {} do
         end
     end
 
-    function API:FindValue(Table, Value) -- return boolean
+    function API:FindValue(Table, Value)
         if type(Table) == "table" then
             for _, value in next, Table do
                 if value == Value then
@@ -123,7 +135,7 @@ local API = {} do
         return false
     end
 
-    function API:GetPartWithName(Name, Path) -- return part
+    function API:GetPartWithName(Name, Path)
         for _, Object in next, Path:GetChildren() do
             if (Object.Name:match(Name)) then
                 return Object
@@ -131,7 +143,7 @@ local API = {} do
         end
     end
 
-    function API:GetBiggestModel(Path) -- return biggest part
+    function API:GetBiggestModel(Path)
         local Part
         for _, Object in next, Path:GetChildren() do
             if Object:IsA("Model") then
@@ -146,7 +158,7 @@ local API = {} do
         return Part
     end
 
-    function API:ImageHook(Hook, Description, Title, Image) -- send webhook
+    function API:ImageHook(Hook, Description, Title, Image)
         pcall(function()
             local Embed = {
                 color = "3454955",
