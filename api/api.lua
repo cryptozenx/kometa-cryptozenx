@@ -23,7 +23,7 @@ local API = {} do
         local Object = Instance.new(Class)
 
         for Property, Value in next, Properties do
-            if Object[Property] and Property ~= "Parent" then
+            if Object[Property] then
                 Object[Property] = Value
             end
         end
