@@ -3102,7 +3102,7 @@ end, {text = 'Once'})
 Misc_Second:Cheat("Button", "Spawn Drop", function()
     game.ReplicatedStorage.Events.WindShrineTrigger:FireServer()
 end, {text = 'Spawn'})
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Chris12089/atlasbss/main/script.lua"))()
+
 local Misc_Third = Misc_Category:Sector("Other")
 Misc_Third:Cheat("Dropdown", "Equip Accesories", function(Option) local ohString1 = "Equip" local ohTable2 = { ["Mute"] = false, ["Type"] = Option, ["Category"] = "Accessory" } game:GetService("ReplicatedStorage").Events.ItemPackageEvent:InvokeServer(ohString1, ohTable2) end, {options = AccesoriesTable})
 Misc_Third:Cheat("Dropdown", "Equip Masks", function(Option) local ohString1 = "Equip" local ohTable2 = { ["Mute"] = false, ["Type"] = Option, ["Category"] = "Accessory" } game:GetService("ReplicatedStorage").Events.ItemPackageEvent:InvokeServer(ohString1, ohTable2) end, {options = MaskTable})
