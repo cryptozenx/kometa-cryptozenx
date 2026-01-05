@@ -2311,38 +2311,38 @@ game:GetService("Workspace").Particles:FindFirstChild('PopStars').ChildRemoved:C
     end
 end)
 
-game:GetService("Workspace").Particles.Folder2.ChildAdded:Connect(function(Sprout)
-    if Sprout.Name == "Sprout" then
-        Temptable.Sprouts.Detected = true
-        table.insert(Temptable.Sprouts.Instances, {
-            Field = FindFieldWithRay(Sprout.Position + Vector3.new(0, 5, 0), Vector3.new(0, -200, 0)),
-            Coords = Sprout.CFrame,
-            Sprout = Sprout
-        })
-        if Kometa.Toggles.FarmSprouts then
-            LogsModify({Action = 'Add', Callback = 'Found a Sprout!'})
-        end
-    end
-end)
+-- game:GetService("Workspace").Particles.Folder2.ChildAdded:Connect(function(Sprout)
+--     if Sprout.Name == "Sprout" then
+--         Temptable.Sprouts.Detected = true
+--         table.insert(Temptable.Sprouts.Instances, {
+--             Field = FindFieldWithRay(Sprout.Position + Vector3.new(0, 5, 0), Vector3.new(0, -200, 0)),
+--             Coords = Sprout.CFrame,
+--             Sprout = Sprout
+--         })
+--         if Kometa.Toggles.FarmSprouts then
+--             LogsModify({Action = 'Add', Callback = 'Found a Sprout!'})
+--         end
+--     end
+-- end)
 
-game:GetService("Workspace").Particles.Folder2.ChildRemoved:Connect(function(Sprout)
-    if Sprout.Name == "Sprout" then
-        if Kometa.Toggles.Autofarm and Kometa.Toggles.FarmSprouts then 
-            Temptable.Stats.FarmedSprouts += 1
-            local OsTime = os.time()
-            repeat
-                task.wait()
-                CollectTokens(70)
-            until os.time() - OsTime >= 30 or not (Kometa.Toggles.Autofarm and Kometa.Toggles.FarmSprouts)
-        end
-        for Index, Value in next, Temptable.Sprouts.Instances do
-            if Value.Sprout == Sprout then
-                table.remove(Temptable.Sprouts.Instances, Index)
-            end
-        end
-        Temptable.Sprouts.Detected = #Temptable.Sprouts.Instances > 0
-    end
-end)
+-- game:GetService("Workspace").Particles.Folder2.ChildRemoved:Connect(function(Sprout)
+--     if Sprout.Name == "Sprout" then
+--         if Kometa.Toggles.Autofarm and Kometa.Toggles.FarmSprouts then 
+--             Temptable.Stats.FarmedSprouts += 1
+--             local OsTime = os.time()
+--             repeat
+--                 task.wait()
+--                 CollectTokens(70)
+--             until os.time() - OsTime >= 30 or not (Kometa.Toggles.Autofarm and Kometa.Toggles.FarmSprouts)
+--         end
+--         for Index, Value in next, Temptable.Sprouts.Instances do
+--             if Value.Sprout == Sprout then
+--                 table.remove(Temptable.Sprouts.Instances, Index)
+--             end
+--         end
+--         Temptable.Sprouts.Detected = #Temptable.Sprouts.Instances > 0
+--     end
+-- end)
 
 game:GetService("Workspace").Particles.ChildAdded:Connect(function(Vicious)
     if string.find(Vicious.Name, "Vicious") and not Temptable.Detected.Vicious then
