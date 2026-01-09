@@ -1,173 +1,263 @@
 local API = {} do
+    local Players = game:GetService("Players")
+    local TweenService = game:GetService("TweenService")
+    local StarterGui = game:GetService("StarterGui")
+    local PathfindingService = game:GetService("PathfindingService")
+    local HttpService = game:GetService("HttpService")
 
-    function API:Load()
-        API.Services = {}
-        setmetatable(API.Services, {
-            __index = function(_, Service_Name)
-                return game:GetService(Service_Name)
+    local symbols = ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"):split("")
+    local suffixes = {"k", "m", "b", "t", "q", "Q", "sx", "sp", "o", "n", "d"}
+
+    API.Services = setmetatable({}, {
+        __index = function(self, name)
+            local success, service = pcall(game.GetService, game, name)
+            if success then
+                rawset(self, name, service)
+                return service
             end
+            warn("[API] Service not found:", name)
+            return nil
+        end,
+        __newindex = function()
+            error("[API] Services table is read-only", 2)
+        end
+    })
+
+    API.S = API.Services
+
+    function API:getService(name)
+        return self.S[name]
+    end
+
+    function API:player()
+        return Players.LocalPlayer
+    end
+
+    function API:character()
+        return self:player().Character
+    end
+
+    function API:root()
+        local char = self:character()
+        return char and char:WaitForChild("HumanoidRootPart")
+    end
+
+    function API:humanoid()
+        local char = self:character()
+        return char and char:WaitForChild("Humanoid")
+    end
+
+    function API:properties(tbl, prop)
+        local result = {}
+        for _, obj in next, tbl do
+            if obj and obj[prop] then
+                table.insert(result, obj[prop])
+            end
+        end
+        return result
+    end
+
+    function API:sort(tbl, func, ...)
+        table.sort(tbl, func, ...)
+        return tbl
+    end
+
+    function API:indexes(tbl)
+        local result = {}
+        for idx in next, tbl do
+            table.insert(result, idx)
+        end
+        return result
+    end
+
+    function API:tween(time, cf)
+        local char = self:character()
+        if not char then return end
+        
+        local root = char:FindFirstChild("HumanoidRootPart")
+        if not root then return end
+
+        local tween = TweenService:Create(root, TweenInfo.new(time, Enum.EasingStyle.Linear), {CFrame = cf})
+        tween:Play()
+        task.wait(time)
+    end
+
+    function API:tweenNoDelay(time, cf)
+        local char = self:character()
+        if not char then return end
+        
+        local root = char:FindFirstChild("HumanoidRootPart")
+        if not root then return end
+
+        TweenService:Create(root, TweenInfo.new(time, Enum.EasingStyle.Linear), {CFrame = cf}):Play()
+    end
+
+    function API:walkTo(pos)
+        local humanoid = self:humanoid()
+        if humanoid then
+            humanoid:MoveTo(pos)
+        end
+    end
+
+    function API:teleport(cf)
+        local root = self:root()
+        if root then
+            root.CFrame = cf
+        end
+    end
+
+    function API:pathfind(pos)
+        local humanoid = self:humanoid()
+        local root = self:root()
+        if not (humanoid and root) then return end
+
+        local path = PathfindingService:CreatePath({AgentCanJump = true, WaypointSpacing = 1})
+        path:ComputeAsync(root.Position, pos)
+
+        for _, wp in ipairs(path:GetWaypoints()) do
+            humanoid:MoveTo(wp.Position)
+            humanoid.MoveToFinished:Wait()
+            if wp.Action == Enum.PathWaypointAction.Jump then
+                humanoid.Jump = true
+            end
+        end
+    end
+
+    function API:magnitude(p1, p2)
+        return (p1 - p2).Magnitude
+    end
+
+    function API:toHms(seconds)
+        local mins = math.floor(seconds / 60)
+        seconds = seconds % 60
+        local hours = math.floor(mins / 60)
+        mins = mins % 60
+        return string.format("%02i:%02i:%02i", hours, mins, seconds)
+    end
+
+    function API:suffixString(num)
+        for i = #suffixes, 1, -1 do
+            local pow = 10 ^ (i * 3)
+            if num >= pow then
+                return string.format("%.1f%s", num / pow, suffixes[i])
+            end
+        end
+        return tostring(num)
+    end
+
+    function API:notify(title, text, duration)
+        StarterGui:SetCore("SendNotification", {
+            Title = title,
+            Text = text,
+            Duration = duration or 5
         })
     end
 
-    function API:Properties(Table, Property)
-        local PropertiesTable = {}
-        for _, Instance in next, Table do
-            if Instance and Instance[Property] then
-                table.insert(PropertiesTable, Instance[Property])
-            end
-        end
-        return PropertiesTable
-    end
-
-    function API:Sort(Table, Function, ...) 
-        table.sort(Table, Function, ...)
-        return Table or {}
-    end
-
-    function API:Indexes(Table)
-        local Indexes = {}
-        for Index, _ in next, Table do
-            table.insert(Indexes, Index)
-        end
-        return Indexes
-    end
-
-    function API:Player()
-        return game:GetService("Players").LocalPlayer
-    end
-
-    function API:Character()
-        return self:Player().Character
-    end
-
-    function API:Root()
-        return self:Character():WaitForChild("HumanoidRootPart")
-    end
-
-    function API:Humanoid()
-        return self:Character():WaitForChild("Humanoid")
-    end
-
-    function API:Tween(Time, CF)
-        pcall(function()
-            game:GetService("TweenService"):Create(self:Root(), TweenInfo.new(Time, Enum.EasingStyle.Linear), { CFrame = CF }):Play() 
-            task.wait(Time)
-        end)
-    end
-
-    function API:TweenNoDelay(Time, CF)
-        pcall(function()
-            game:GetService("TweenService"):Create(self:Root(), TweenInfo.new(Time, Enum.EasingStyle.Linear), { CFrame = CF }):Play() 
-        end)
-    end
-
-    function API:WalkTo(Position)
-        self:Humanoid():MoveTo(Position)
-    end
-
-    function API:Teleport(CFrame)
-        self:Root().CFrame = CFrame
-    end
-
-    function API:Magnitude(Pos1, Pos2)
-        return (Pos1 - Pos2).Magnitude
-    end
-
-    function API:Notify(Title, Description, Duration)
-        pcall(function()
-            game:GetService("StarterGui"):SetCore("SendNotification", {
-                Title = Title;
-                Text = Description;
-                Duration = Duration;
-            })
-        end)
-    end
-
-    function API:ToHMS(Time)
-        local Minutes = (Time - Time % 60) / 60
-        Time -= Minutes * 60
-        local Hours = (Minutes - Minutes % 60) / 60
-        Minutes -= Hours * 60
-        return string.format("%02i", Hours)..":"..string.format("%02i", Minutes)..":"..string.format("%02i", Time)
-    end
-
-    function API:SuffixString(String)
-        local Suffixes = {"k", "m", "b", "t", "q", "Q", "sx", "sp", "o", "n", "d"}
-        for Index = #Suffixes, 1, -1 do
-            local Pow = math.pow(10, Index * 3)
-            if String >= Pow then
-                return ("%.1f"):format(String / Pow) .. Suffixes[Index]
-            end
-        end
-        return tostring(String)
-    end
-
-    function API:TableFind(Table, Value)
-        for index, value in next, Table do
-            if value == Value then
-                return index
+    function API:tableFind(tbl, val)
+        for idx, v in next, tbl do
+            if v == val then
+                return idx
             end
         end
     end
 
-    function API:FindValue(Table, Value)
-        if type(Table) == "table" then
-            for _, value in next, Table do
-                if value == Value then
-                    return true
-                end
+    function API:findValue(tbl, val)
+        if type(tbl) ~= "table" then return false end
+        for _, v in next, tbl do
+            if v == val then
+                return true
             end
-        else
-            return false
         end
         return false
     end
 
-    function API:GetPartWithName(Name, Path)
-        for _, Object in next, Path:GetChildren() do
-            if (Object.Name:match(Name)) then
-                return Object
+    function API:getPartWithName(name, path)
+        for _, obj in next, path:GetChildren() do
+            if obj.Name:match(name) then
+                return obj
             end
         end
     end
 
-    function API:GetBiggestModel(Path)
-        local Part
-        for _, Object in next, Path:GetChildren() do
-            if Object:IsA("Model") then
-                if Part == nil then
-                    Part = Object
-                end
-                if Object:GetExtentsSize().Y > Part:GetExtentsSize().Y then
-                    Part = Object
+    function API:getBiggestModel(path)
+        local biggest
+        for _, obj in next, path:GetChildren() do
+            if obj:IsA("Model") then
+                if not biggest or obj:GetExtentsSize().Y > biggest:GetExtentsSize().Y then
+                    biggest = obj
                 end
             end
         end
-        return Part
+        return biggest
     end
 
-    function API:ImageHook(Hook, Description, Title, Image)
-        pcall(function()
-            local Embed = {
-                color = "3454955",
-                title =  Title,
-                description = Description,
-                thumbnail = {
-                    url = Image
-                },
-            }
+    function API:imageHook(url, desc, title, image)
+        local embed = {
+            color = 3454955,
+            title = title,
+            description = desc,
+            thumbnail = {url = image}
+        }
 
-            (syn and syn.request or http_request) {
-                Url = Hook,
+        local request = syn and syn.request or http_request
+        if request then
+            request({
+                Url = url,
                 Method = "POST",
-                Headers = {
-                    ["Content-Type"] = "application/json"
-                },
-                Body = game:GetService("HttpService"):JSONEncode( { content = Content; embeds = { Embed } } ),
-            }
-        end)
+                Headers = {["Content-Type"] = "application/json"},
+                Body = HttpService:JSONEncode({embeds = {embed}})
+            })
+        end
     end
 
+    function API:generateRandomString(len)
+        local result = ""
+        for _ = 1, len do
+            result = result .. symbols[math.random(1, #symbols)]
+        end
+        return result
+    end
+
+    function API:tableFilter(tbl, predicate, keepKeys)
+        local result = {}
+        for k, v in next, tbl do
+            if predicate(v, k) then
+                if keepKeys then
+                    result[k] = v
+                else
+                    table.insert(result, v)
+                end
+            end
+        end
+        return result
+    end
+
+    function API:tableMap(tbl, mapper)
+        local result = {}
+        for k, v in next, tbl do
+            result[k] = mapper(v, k)
+        end
+        return result
+    end
+
+    function API:tableForEach(tbl, action)
+        for k, v in next, tbl do
+            action(v, k)
+        end
+    end
+
+    function API:setupInstance(parent, className, name, props)
+        local existing = parent:FindFirstChild(name)
+        if existing then return existing end
+
+        local obj = Instance.new(className)
+        obj.Name = name
+        for prop, val in pairs(props) do
+            obj[prop] = val
+        end
+        obj.Parent = parent
+        return obj
+    end
 end
------- 
+
 return API
