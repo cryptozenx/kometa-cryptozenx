@@ -121,9 +121,9 @@ function finity.new(isdark, gprojectName, thinProject)
 	local self2 = finityObject
 	local self = finity
 
-	if not finity.gs["RunService"]:IsStudio() and finity.gs["CoreGui"]:FindFirstChild("FinityUI") then
-		self.gs["CoreGui"]:FindFirstChild("FinityUI"):Destroy()
-	end
+	-- if not finity.gs["RunService"]:IsStudio() and finity.gs["CoreGui"]:FindFirstChild("FinityUI") then
+	-- 	self.gs["CoreGui"]:FindFirstChild("FinityUI"):Destroy()
+	-- end
 
 	local theme = finity.theme
 	local projectName = false
