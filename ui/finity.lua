@@ -121,9 +121,11 @@ function finity.new(isdark, gprojectName, thinProject)
 	local self2 = finityObject
 	local self = finity
 
-	-- if not finity.gs["RunService"]:IsStudio() and finity.gs["CoreGui"]:FindFirstChild("FinityUI") then
-	-- 	self.gs["CoreGui"]:FindFirstChild("FinityUI"):Destroy()
-	-- end
+	local CoreGui = game:GetService("CoreGui")
+
+	if not finity.gs["RunService"]:IsStudio() and CoreGui:FindFirstChild("FinityUI") then
+		CoreGui:FindFirstChild("FinityUI"):Destroy()
+	end
 
 	local theme = finity.theme
 	local projectName = false
@@ -1769,7 +1771,7 @@ function finity.new(isdark, gprojectName, thinProject)
 	self2.categories.ClipsDescendants = true
 
 	if not finity.gs["RunService"]:IsStudio() then
-		self2.userinterface.Parent = self.gs["CoreGui"]
+		self2.userinterface.Parent = CoreGui
 	else
 		self2.userinterface.Parent = self.gs["Players"].LocalPlayer:WaitForChild("PlayerGui")
 	end
