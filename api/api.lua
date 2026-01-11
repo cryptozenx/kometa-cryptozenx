@@ -8,27 +8,6 @@ local API = {} do
     local symbols = ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"):split("")
     local suffixes = {"k", "m", "b", "t", "q", "Q", "sx", "sp", "o", "n", "d"}
 
-    API.Services = setmetatable({}, {
-        __index = function(self, name)
-            local success, service = pcall(game.GetService, game, name)
-            if success then
-                rawset(self, name, service)
-                return service
-            end
-            warn("[API] Service not found:", name)
-            return nil
-        end,
-        __newindex = function()
-            error("[API] Services table is read-only", 2)
-        end
-    })
-
-    API.S = API.Services
-
-    function API:getService(name)
-        return self.S[name]
-    end
-
     function API:player()
         return Players.LocalPlayer
     end
@@ -68,28 +47,6 @@ local API = {} do
             table.insert(result, idx)
         end
         return result
-    end
-
-    function API:tween(time, cf)
-        local char = self:character()
-        if not char then return end
-        
-        local root = char:FindFirstChild("HumanoidRootPart")
-        if not root then return end
-
-        local tween = TweenService:Create(root, TweenInfo.new(time, Enum.EasingStyle.Linear), {CFrame = cf})
-        tween:Play()
-        task.wait(time)
-    end
-
-    function API:tweenNoDelay(time, cf)
-        local char = self:character()
-        if not char then return end
-        
-        local root = char:FindFirstChild("HumanoidRootPart")
-        if not root then return end
-
-        TweenService:Create(root, TweenInfo.new(time, Enum.EasingStyle.Linear), {CFrame = cf}):Play()
     end
 
     function API:walkTo(pos)
@@ -252,7 +209,7 @@ local API = {} do
 
         local obj = Instance.new(className)
         obj.Name = name
-        for prop, val in pairs(props) do
+        for prop, val in next, props do
             obj[prop] = val
         end
         obj.Parent = parent
