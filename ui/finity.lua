@@ -121,11 +121,9 @@ function finity.new(isdark, gprojectName, thinProject)
 	local self2 = finityObject
 	local self = finity
 
-	local CoreGui = game:GetService("CoreGui")
-
-	if not finity.gs["RunService"]:IsStudio() and CoreGui:FindFirstChild("FinityUI") then
-		CoreGui:FindFirstChild("FinityUI"):Destroy()
-	end
+	-- if not finity.gs["RunService"]:IsStudio() and self.gs["CoreGui"]:WaitForChild("FinityUI") then
+	-- 	self.gs["CoreGui"]:WaitForChild("FinityUI"):Destroy()
+	-- end
 
 	local theme = finity.theme
 	local projectName = false
@@ -451,12 +449,11 @@ function finity.new(isdark, gprojectName, thinProject)
 				local largestListSize = 0
 
 				largestListSize = uilistlayout.AbsoluteContentSize.Y
-
 				if uilistlayout2.AbsoluteContentSize.Y > largestListSize then
 					largestListSize = largestListSize
 				end
 
-				largestListSize = largestListSize + 200
+				largestListSize = largestListSize + 300
 
 				category.container.CanvasSize = UDim2.new(0, 0, 0, largestListSize + 5)
 			end
@@ -1771,7 +1768,7 @@ function finity.new(isdark, gprojectName, thinProject)
 	self2.categories.ClipsDescendants = true
 
 	if not finity.gs["RunService"]:IsStudio() then
-		self2.userinterface.Parent = CoreGui
+		self2.userinterface.Parent = self.gs["CoreGui"]
 	else
 		self2.userinterface.Parent = self.gs["Players"].LocalPlayer:WaitForChild("PlayerGui")
 	end
