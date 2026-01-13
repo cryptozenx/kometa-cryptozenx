@@ -139,13 +139,13 @@ function finity.new(isdark, gprojectName, thinProject)
 	local firstCategory = true
 	local savedposition = UDim2.new(0.5, 0, 0.5, 0)
 	local ContainerSize = UDim2.new(0, 900, 0, 300)
-
+	
 	local finityData
 	finityData = {
 		UpConnection = nil,
 		ToggleKey = Enum.KeyCode.Home,
 	}
-
+	
 	local function SetUpDragging(DragPoint, Main)
 		pcall(function()
 			local Dragging, DragInput, MousePos, FramePos = false, false, false, false
@@ -193,7 +193,7 @@ function finity.new(isdark, gprojectName, thinProject)
 				TweenCooldown = true
 
 				pcall(function() self2.modal.Modal = toggled end)
-
+		
 				if toggled then
 					self2.container:TweenPosition(savedposition, "Out", "Sine", 0.5, true)
 				else
@@ -235,7 +235,7 @@ function finity.new(isdark, gprojectName, thinProject)
 		ZIndexBehavior = Enum.ZIndexBehavior.Global,
 		ResetOnSpawn = false,
 	})
-
+	
 	self2.container = self:Create("ImageLabel", {
 		Active = true,
 		Name = "Container",
@@ -566,7 +566,7 @@ function finity.new(isdark, gprojectName, thinProject)
 
 				cheat.label = finity:Create("TextLabel", {
 					Name = "Title",
-					AnchorPoint = Vector2.new(0.5, 0),
+					AnchorPoint = UDim.new(0.5, 0),
 					BackgroundColor3 = Color3.new(1, 1, 1),
 					BackgroundTransparency = 1,
 					Position = UDim2.new(0.5, 0, 0, 0),
@@ -865,10 +865,10 @@ function finity.new(isdark, gprojectName, thinProject)
 							Position = UDim2.new(0, 10, 0, 0),
 							Size = UDim2.new(1, -35, 1, 0),
 							ZIndex = 2,
-							Font = Enum.Font.GothamBold,
+							Font = Enum.Font.Gotham,
 							Text = tostring(cheat.value),
 							TextColor3 = theme.dropdown_text,
-							TextSize = 14,
+							TextSize = 13,
 							TextXAlignment = Enum.TextXAlignment.Left
 						})
 
@@ -1038,17 +1038,6 @@ function finity.new(isdark, gprojectName, thinProject)
 						cheat.selected.Parent = cheat.dropdown
 						cheat.dropdown.Parent = cheat.container
 						cheat.list.Parent = cheat.container
-						
-						cheat.label.AnchorPoint = Vector2.new(0, 0)
-						cheat.label.Position = UDim2.new(0, 0, 0, 0)
-						cheat.label.Size = UDim2.new(1, 0, 0.5, 0)
-						cheat.label.Parent = cheat.container
-
-						cheat.container.AnchorPoint = Vector2.new(0, 1)
-						cheat.container.Position = UDim2.new(0, 0, 1, 0)
-						cheat.container.Size = UDim2.new(0, 150, 0, 25)
-						
-						cheat.frame.Size = UDim2.new(1, 0, 0, 50)
 					elseif string.lower(kind) == 'multidropdown' then
 						if data then
 							if data.default then
@@ -1345,11 +1334,19 @@ function finity.new(isdark, gprojectName, thinProject)
 						local suffix = data.suffix or ""
 						local minimum = data.min or 0
 						local maximum = data.max or 1
-						local default = data.default or minimum
+						local default = data.default
 						local precise = data.precise
 
 						local moveconnection
 						local releaseconnection
+
+						cheat.label.AnchorPoint = UDim.new(0, 0)
+						cheat.label.Position = UDim2.new(0, 0, 0, 0)
+						cheat.label.Size = UDim2.new(1, 0, 0, 25)
+
+						cheat.container.AnchorPoint = UDim.new(0.5, 0.5)
+						cheat.container.Position = UDim2.new(0.5, 0, 0.5, 0)
+						cheat.container.Size = UDim2.new(1, 0, 1, 0)
 
 						cheat.sliderbar = finity:Create("TextButton", {
 							Name = "Sliderbar",
@@ -1366,11 +1363,11 @@ function finity.new(isdark, gprojectName, thinProject)
 							AnchorPoint = Vector2.new(1, 0.5),
 							BackgroundColor3 = Color3.new(1, 1, 1),
 							BackgroundTransparency = 1,
-							Position = UDim2.new(1, -5, 0.5, 0),
+							Position = UDim2.new(1, 5, 0.5, 0),
 							Size = UDim2.new(0.1, 0, 1, 0),
 							ZIndex = 2,
-							Font = Enum.Font.GothamBold,
-							Text = tostring(cheat.value) .. suffix,
+							Font = Enum.Font.Gotham,
+							Text = "",
 							TextColor3 = theme.slider_text,
 							TextSize = 15,
 						})
@@ -1378,142 +1375,137 @@ function finity.new(isdark, gprojectName, thinProject)
 						cheat.visiframe = finity:Create("Frame", {
 							Name = "Frame",
 							BackgroundColor3 = theme.slider_color,
-							BackgroundTransparency = 0,
-							Size = UDim2.new(0, 0, 1, 0),
+							BackgroundTransparency = 0, 
+							Size = UDim2.new(0.5, 0, 1, 0),
 							ZIndex = 2,
 						})
-						
-						local uiCornerSlider = finity:Create("UICorner", {
-							CornerRadius = UDim.new(0, 8)
-						})
-						
-						local uiCornerFrame = finity:Create("UICorner", {
-							CornerRadius = UDim.new(0, 8)
-						})
-						
-						uiCornerSlider.Parent = cheat.sliderbar
-						uiCornerFrame.Parent = cheat.visiframe
-						
-						local function setSliderValue(value)
-							value = math.clamp(value, minimum, maximum)
 
-							local percent = (value - minimum) / (maximum - minimum)
-							cheat.value = value
-
-							if precise then
-								cheat.numbervalue.Text = tostring(math.floor(value)) .. suffix
-							else
-								cheat.numbervalue.Text = string.format("%.2f", value) .. suffix
-							end
-
+						if data.default then
+							local size = math.clamp(data.default - cheat.sliderbar.AbsolutePosition.X, 0, 150)
+							local percent = size / 150
+							cheat.value = data.default
 							finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
-								Size = UDim2.new(percent, 0, 1, 0)
+								Size = UDim2.new(percent or 0.5, 0, 1, 0),
 							}):Play()
-						end
-
-						local function getValueFromMousePosition()
-							local sliderWidth = cheat.sliderbar.AbsoluteSize.X
-							local sliderStart = cheat.sliderbar.AbsolutePosition.X
-
-							local percent = math.clamp((mouse.X - sliderStart) / sliderWidth, 0, 1)
-							return minimum + (maximum - minimum) * percent
-						end
-
-						local function updateSliderFromMouse()
-							local newValue = getValueFromMousePosition()
-							setSliderValue(newValue)
-
 							if callback then
 								local s, e = pcall(function()
-									if precise then
-										callback(math.floor(newValue))
-									else
-										callback(newValue)
-									end
+									callback(cheat.value)
 								end)
 
-								if not s then 
-									warn("error: ".. e) 
-								end
+								if not s then warn("error: ".. e) end
 							end
 						end
 
-						if default then
-							setSliderValue(default)
-
+						function cheat:SetValue(value)
+							local size = value
+							cheat.value = value
+							finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
+								Size = UDim2.new(size / maximum, 0, 1, 0),
+							}):Play()
 							if callback then
 								local s, e = pcall(function()
-									if precise then
-										callback(math.floor(default))
-									else
-										callback(default)
-									end
+									callback(cheat.value)
 								end)
 
-								if not s then 
-									warn("error: ".. e) 
-								end
+								if not s then warn("error: ".. e) end
 							end
 						end
 
 						cheat.sliderbar.MouseButton1Down:Connect(function()
+							local size = math.clamp(mouse.X - cheat.sliderbar.AbsolutePosition.X, 0, 150)
+							local percent = size / 150
+
+							cheat.value = math.floor((minimum + (maximum - minimum) * percent) * 100) / 100
+							if precise then
+								cheat.numbervalue.Text = math.ceil(tostring(cheat.value)) .. suffix
+							else
+								cheat.numbervalue.Text = tostring(cheat.value) .. suffix
+							end
+
+							if callback then
+								local s, e = pcall(function()
+									if data.precise then
+										callback(math.ceil(cheat.value))
+									else
+										callback(cheat.value)
+									end
+								end)
+
+								if not s then warn("error: ".. e) end
+							end
+
 							finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
-								BackgroundColor3 = theme.slider_color_sliding
+								Size = UDim2.new(size / 150, 0, 1, 0),
+								ImageColor3 = theme.slider_color_sliding
 							}):Play()
 
-							updateSliderFromMouse()
+							finity.gs["TweenService"]:Create(cheat.numbervalue, TweenInfo.new(0.1), {
+								Position = UDim2.new(size / 150, 5, 0.5, 0),
+								TextTransparency = 0
+							}):Play()
 
-							moveconnection = mouse.Move:Connect(updateSliderFromMouse)
+							moveconnection = mouse.Move:Connect(function()
+								local size = math.clamp(mouse.X - cheat.sliderbar.AbsolutePosition.X, 0, 150)
+								local percent = size / 150
 
-							releaseconnection = finity.gs["UserInputService"].InputEnded:Connect(function(input)
-								if input.UserInputType == Enum.UserInputType.MouseButton1 then
+								cheat.value = math.floor((minimum + (maximum - minimum) * percent) * 100) / 100
+								if precise then
+									cheat.numbervalue.Text = math.ceil(tostring(cheat.value)) .. suffix
+								else
+									cheat.numbervalue.Text = tostring(cheat.value) .. suffix
+								end
+
+								if callback then
+									local s, e = pcall(function()
+										if data.precise then
+											callback(math.ceil(cheat.value))
+										else
+											callback(cheat.value)
+										end
+									end)
+
+									if not s then warn("error: ".. e) end
+								end
+
+								finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
+									Size = UDim2.new(size / 150, 0, 1, 0),
+									ImageColor3 = theme.slider_color_sliding
+								}):Play()
+
+								local Position = UDim2.new(size / 150, 5, 0.5, 0);
+
+								if Position.Width.Scale >= 0.6 then
+									Position = UDim2.new(1, -cheat.numbervalue.TextBounds.X, 0.5, 10);
+								end
+
+								finity.gs["TweenService"]:Create(cheat.numbervalue, TweenInfo.new(0.1), {
+									Position = Position,
+									TextTransparency = 0
+								}):Play()
+							end)
+
+							releaseconnection = finity.gs["UserInputService"].InputEnded:Connect(function(Mouse)
+								if Mouse.UserInputType == Enum.UserInputType.MouseButton1 then
+
 									finity.gs["TweenService"]:Create(cheat.visiframe, TweenInfo.new(0.1), {
-										BackgroundColor3 = theme.slider_color
+										ImageColor3 = theme.slider_color
 									}):Play()
 
-									if moveconnection then 
-										moveconnection:Disconnect() 
-										moveconnection = nil
-									end
+									finity.gs["TweenService"]:Create(cheat.numbervalue, TweenInfo.new(0.1), {
+										TextTransparency = 1
+									}):Play()
 
-									if releaseconnection then 
-										releaseconnection:Disconnect() 
-										releaseconnection = nil
-									end
+									moveconnection:Disconnect()
+									moveconnection = nil
+									releaseconnection:Disconnect()
+									releaseconnection = nil
 								end
 							end)
 						end)
 
-						function cheat:SetValue(value)
-							setSliderValue(value)
-
-							if callback then
-								local s, e = pcall(function()
-									if precise then
-										callback(math.floor(value))
-									else
-										callback(value)
-									end
-								end)
-
-								if not s then 
-									warn("error: ".. e) 
-								end
-							end
-						end
-						
 						cheat.visiframe.Parent = cheat.sliderbar
 						cheat.numbervalue.Parent = cheat.sliderbar
 						cheat.sliderbar.Parent = cheat.container
-						
-						cheat.label.AnchorPoint = Vector2.new(0, 0)
-						cheat.label.Position = UDim2.new(0, 0, 0, 0)
-						cheat.label.Size = UDim2.new(1, 0, 0, 25)
-						cheat.label.Parent = cheat.container
-						
-						cheat.container.AnchorPoint = Vector2.new(0.5, 0.5)
-						cheat.container.Position = UDim2.new(0.5, 0, 0.5, 0)
-						cheat.container.Size = UDim2.new(1, 0, 1, 0)
 					elseif string.lower(kind) == "button" then
 						local button_text = data and data.text
 
@@ -1735,13 +1727,9 @@ function finity.new(isdark, gprojectName, thinProject)
 				end
 
 				cheat.frame.Parent = sector.container
-				
-				if string.lower(kind) ~= "slider" then
-					cheat.label.Parent = cheat.frame
-				end
-				
+				cheat.label.Parent = cheat.frame
 				cheat.container.Parent = cheat.frame
-				
+
 				return cheat
 			end
 
@@ -1766,7 +1754,7 @@ function finity.new(isdark, gprojectName, thinProject)
 	else
 		self2.userinterface.Parent = self.gs["Players"].LocalPlayer:WaitForChild("PlayerGui")
 	end
-
+	
 	self2.container.Parent = self2.userinterface
 	self2.categories.Parent = self2.container
 	self2.sidebar.Parent = self2.container
