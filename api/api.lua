@@ -1,220 +1,217 @@
-local API = {} do
-    local Players = game:GetService("Players")
-    local TweenService = game:GetService("TweenService")
-    local StarterGui = game:GetService("StarterGui")
-    local PathfindingService = game:GetService("PathfindingService")
-    local HttpService = game:GetService("HttpService")
+local API = {}
 
-    local symbols = ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"):split("")
-    local suffixes = {"k", "m", "b", "t", "q", "Q", "sx", "sp", "o", "n", "d"}
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local StarterGui = game:GetService("StarterGui")
+local PathfindingService = game:GetService("PathfindingService")
 
-    function API:player()
-        return Players.LocalPlayer
-    end
+local SYMBOLS = ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"):split("")
+local SUFFIXES = { "k", "m", "b", "t", "q", "Q", "sx", "sp", "o", "n", "d" }
 
-    function API:character()
-        return self:player().Character
-    end
+-- Server methods
+function API:getServerUptime()
+	return workspace.DistributedGameTime
+end
 
-    function API:root()
-        local char = self:character()
-        return char and char:WaitForChild("HumanoidRootPart")
-    end
+-- Player methods
+function API:getPlayer()
+	return Players.LocalPlayer
+end
 
-    function API:humanoid()
-        local char = self:character()
-        return char and char:WaitForChild("Humanoid")
-    end
+function API:getCharacter()
+	local player = self:getPlayer()
+	return player and player.Character
+end
 
-    function API:properties(tbl, prop)
-        local result = {}
-        for _, obj in next, tbl do
-            if obj and obj[prop] then
-                table.insert(result, obj[prop])
-            end
-        end
-        return result
-    end
+function API:getRootPart()
+	local character = self:getCharacter()
+	return character and character:FindFirstChild("HumanoidRootPart")
+end
 
-    function API:sort(tbl, func, ...)
-        table.sort(tbl, func, ...)
-        return tbl
-    end
+function API:getHumanoid()
+	local character = self:getCharacter()
+	return character and character:FindFirstChildOfClass("Humanoid")
+end
 
-    function API:indexes(tbl)
-        local result = {}
-        for idx in next, tbl do
-            table.insert(result, idx)
-        end
-        return result
-    end
+-- Movement
+function API:walkTo(position)
+	local humanoid = self:getHumanoid()
+	if humanoid then
+		humanoid:MoveTo(position)
+	end
+end
 
-    function API:walkTo(pos)
-        local humanoid = self:humanoid()
-        if humanoid then
-            humanoid:MoveTo(pos)
-        end
-    end
+function API:teleport(cframe)
+	local root = self:getRootPart()
+	if root then
+		root.CFrame = cframe
+	end
+end
 
-    function API:teleport(cf)
-        local root = self:root()
-        if root then
-            root.CFrame = cf
-        end
-    end
+function API:pathfindTo(position)
+	local humanoid = self:getHumanoid()
+	local root = self:getRootPart()
 
-    function API:pathfind(pos)
-        local humanoid = self:humanoid()
-        local root = self:root()
-        if not (humanoid and root) then return end
+	if not (humanoid and root) then
+		return false
+	end
 
-        local path = PathfindingService:CreatePath({AgentCanJump = true, WaypointSpacing = 1})
-        path:ComputeAsync(root.Position, pos)
+	local path = PathfindingService:CreatePath({
+		AgentCanJump = true,
+		WaypointSpacing = 2,
+		AgentHeight = 5,
+		AgentRadius = 2,
+	})
 
-        for _, wp in ipairs(path:GetWaypoints()) do
-            humanoid:MoveTo(wp.Position)
-            humanoid.MoveToFinished:Wait()
-            if wp.Action == Enum.PathWaypointAction.Jump then
-                humanoid.Jump = true
-            end
-        end
-    end
+	local success = pcall(function()
+		path:ComputeAsync(root.Position, position)
+	end)
 
-    function API:magnitude(p1, p2)
-        return (p1 - p2).Magnitude
-    end
+	if not success then
+		return false
+	end
 
-    function API:toHms(seconds)
-        local mins = math.floor(seconds / 60)
-        seconds = seconds % 60
-        local hours = math.floor(mins / 60)
-        mins = mins % 60
-        return string.format("%02i:%02i:%02i", hours, mins, seconds)
-    end
+	if path.Status == Enum.PathStatus.Success then
+		local waypoints = path:GetWaypoints()
+		for _, waypoint in ipairs(waypoints) do
+			humanoid:MoveTo(waypoint.Position)
+			humanoid.MoveToFinished:Wait()
+			if waypoint.Action == Enum.PathWaypointAction.Jump then
+				humanoid.Jump = true
+			end
+		end
+		return true
+	end
 
-    function API:suffixString(num)
-        for i = #suffixes, 1, -1 do
-            local pow = 10 ^ (i * 3)
-            if num >= pow then
-                return string.format("%.1f%s", num / pow, suffixes[i])
-            end
-        end
-        return tostring(num)
-    end
+	return false
+end
 
-    function API:notify(title, text, duration)
-        StarterGui:SetCore("SendNotification", {
-            Title = title,
-            Text = text,
-            Duration = duration or 5
-        })
-    end
+-- Table utilities
+function API.filterTable(tbl, predicate, keepKeys)
+	local result = {}
+	for key, value in pairs(tbl) do
+		if predicate(value, key) then
+			if keepKeys then
+				result[key] = value
+			else
+				table.insert(result, value)
+			end
+		end
+	end
+	return result
+end
 
-    function API:tableFind(tbl, val)
-        for idx, v in next, tbl do
-            if v == val then
-                return idx
-            end
-        end
-    end
+API.mapTable = function(tbl, mapper)
+	local result = {}
+	for key, value in pairs(tbl) do
+		result[key] = mapper(value, key)
+	end
+	return result
+end
 
-    function API:findValue(tbl, val)
-        if type(tbl) ~= "table" then return false end
-        for _, v in next, tbl do
-            if v == val then
-                return true
-            end
-        end
-        return false
-    end
+API.forEachTable = function(tbl, action)
+	for key, value in pairs(tbl) do
+		action(value, key)
+	end
+end
 
-    function API:getPartWithName(name, path)
-        for _, obj in next, path:GetChildren() do
-            if obj.Name:match(name) then
-                return obj
-            end
-        end
-    end
+function API.findInTable(tbl, target)
+	for key, value in pairs(tbl) do
+		if value == target then
+			return key
+		end
+	end
+	return nil
+end
 
-    function API:getBiggestModel(path)
-        local biggest
-        for _, obj in next, path:GetChildren() do
-            if obj:IsA("Model") then
-                if not biggest or obj:GetExtentsSize().Y > biggest:GetExtentsSize().Y then
-                    biggest = obj
-                end
-            end
-        end
-        return biggest
-    end
+function API.extractProperty(tbl, propertyName)
+	local result = {}
+	for _, object in ipairs(tbl) do
+		if object and object[propertyName] then
+			table.insert(result, object[propertyName])
+		end
+	end
+	return result
+end
 
-    function API:imageHook(url, desc, title, image)
-        local embed = {
-            color = 3454955,
-            title = title,
-            description = desc,
-            thumbnail = {url = image}
-        }
+-- Formatting utilities
+function API.formatTime(seconds)
+	local hours = math.floor(seconds / 3600)
+	local minutes = math.floor((seconds % 3600) / 60)
+	local seconds = math.floor(seconds % 60)
+	return string.format("%02d:%02d:%02d", hours, minutes, seconds)
+end
 
-        local request = syn and syn.request or http_request
-        if request then
-            request({
-                Url = url,
-                Method = "POST",
-                Headers = {["Content-Type"] = "application/json"},
-                Body = HttpService:JSONEncode({embeds = {embed}})
-            })
-        end
-    end
+function API.formatNumber(number)
+	for i = #SUFFIXES, 1, -1 do
+		local power = 10 ^ (i * 3)
+		if number >= power then
+			return string.format("%.1f%s", number / power, SUFFIXES[i])
+		end
+	end
+	return tostring(number)
+end
 
-    function API:generateRandomString(len)
-        local result = ""
-        for _ = 1, len do
-            result = result .. symbols[math.random(1, #symbols)]
-        end
-        return result
-    end
+function API.calculateDistance(position1, position2)
+	return (position1 - position2).Magnitude
+end
 
-    function API:tableFilter(tbl, predicate, keepKeys)
-        local result = {}
-        for k, v in next, tbl do
-            if predicate(v, k) then
-                if keepKeys then
-                    result[k] = v
-                else
-                    table.insert(result, v)
-                end
-            end
-        end
-        return result
-    end
+-- Instance utilities
+function API.createInstance(parent, className, properties)
+	local instance = Instance.new(className)
+	for property, value in pairs(properties) do
+		instance[property] = value
+	end
+	instance.Parent = parent
+	return instance
+end
 
-    function API:tableMap(tbl, mapper)
-        local result = {}
-        for k, v in next, tbl do
-            result[k] = mapper(v, k)
-        end
-        return result
-    end
+function API.findInstanceByName(parent, namePattern)
+	for _, child in ipairs(parent:GetChildren()) do
+		if child.Name:match(namePattern) then
+			return child
+		end
+	end
+	return nil
+end
 
-    function API:tableForEach(tbl, action)
-        for k, v in next, tbl do
-            action(v, k)
-        end
-    end
+-- UI
+function API:showNotification(title, text, duration)
+	StarterGui:SetCore("SendNotification", {
+		Title = title,
+		Text = text,
+		Duration = duration or 5,
+		Icon = "rbxassetid://0",
+	})
+end
 
-    function API:setupInstance(parent, className, name, props)
-        local existing = parent:FindFirstChild(name)
-        if existing then return existing end
+-- Utility functions
+function API.generateRandomId(length)
+	local result = {}
+	for i = 1, length do
+		result[i] = SYMBOLS[math.random(1, #SYMBOLS)]
+	end
+	return table.concat(result)
+end
 
-        local obj = Instance.new(className)
-        obj.Name = name
-        for prop, val in next, props do
-            obj[prop] = val
-        end
-        obj.Parent = parent
-        return obj
-    end
+function API.waitForCondition(condition, timeout)
+	local startTime = os.clock()
+	while not condition() do
+		if timeout and os.clock() - startTime > timeout then
+			return false
+		end
+		task.wait()
+	end
+	return true
+end
+
+-- Safe execution
+function API.tryExecute(func, ...)
+	local success, result = pcall(func, ...)
+	if not success then
+		warn("Execution failed:", result)
+	end
+	return success, result
 end
 
 return API
