@@ -1045,6 +1045,7 @@ function neowise.new(gprojectName, gprojectVersion, scale)
 								typing = false
 
 								cheat.value = cheat.textbox.Text
+								cheat.textbox.Text = truncateText(cheat.textbox.Text)
 
 								if callback then
 									local s, e = pcall(function()
