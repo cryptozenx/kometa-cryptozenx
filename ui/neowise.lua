@@ -1037,6 +1037,16 @@ function neowise.new(gprojectName, gprojectVersion, scale)
 							function cheat:SetValue(value)
 								cheat.value = tostring(value)
 								cheat.textbox.Text = tostring(value)
+
+								if callback then
+									local s, e = pcall(function()
+										callback(cheat.value)
+									end)
+
+									if not s then
+										warn("error: " .. e)
+									end
+								end
 							end
 						elseif string.lower(kind) == "toggle" then
 							if data then
