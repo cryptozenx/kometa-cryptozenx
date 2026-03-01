@@ -984,14 +984,59 @@ function neowise.new(gprojectName, gprojectVersion, scale)
 					})
 
 					if kind then
-						if string.lower(kind) == "textbox" then
-							local placeholdertext = data and data.placeholder
-
+						if string.lower(kind) == "label" then
 							cheat.frame.Size = UDim2.new(1, 0, 0, 20 * SCALE)
 
 							function cheat:SetValue(value)
 								cheat.value = tostring(value)
 								cheat.title.Text = tostring(value)
+							end
+						elseif string.lower(kind) == "textbox" then
+							local placeholdertext = data and data.placeholder
+
+							cheat.textbox = neowise:Create("TextBox", {
+								Name = "TextBox",
+								AnchorPoint = Vector2.new(1, 0.5),
+								BackgroundColor3 = neowise.theme.button_background,
+								Position = UDim2.fromScale(1, 0.5),
+								Size = UDim2.new(0, 100 * SCALE, 0, 25 * SCALE),
+								FontFace = neowise.fonts.Inter_Regular,
+								Text = "",
+								PlaceholderText = placeholdertext or "...",
+								TextColor3 = neowise.theme.text_title,
+								TextSize = 12 * SCALE,
+								ZIndex = 2,
+								Parent = cheat.frame,
+							})
+
+							neowise:Create("UICorner", {
+								CornerRadius = UDim.new(0, 10 * SCALE),
+								Parent = cheat.button,
+							})
+
+							cheat.textbox.Focused:Connect(function()
+								typing = true
+							end)
+
+							cheat.textbox.FocusLost:Connect(function()
+								typing = false
+
+								cheat.value = cheat.textbox.Text
+
+								if callback then
+									local s, e = pcall(function()
+										callback(cheat.value)
+									end)
+
+									if not s then
+										warn("error: " .. e)
+									end
+								end
+							end)
+
+							function cheat:SetValue(value)
+								cheat.value = tostring(value)
+								cheat.textbox.Text = tostring(value)
 							end
 						elseif string.lower(kind) == "toggle" then
 							if data then
