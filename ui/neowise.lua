@@ -1015,13 +1015,11 @@ function neowise.new(gprojectName, gprojectVersion, scale)
 							})
 
 							local function truncateText(text)
-								local maxWidth = cheat.textbox.AbsoluteSize.X - 8
+								local maxWidth = cheat.textbox.AbsoluteSize.X - 12
 
 								if #text == 0 then
 									return text
 								end
-
-								cheat.textbox.Text = text
 
 								if cheat.textbox.TextBounds.X <= maxWidth then
 									return text
