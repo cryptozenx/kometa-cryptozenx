@@ -1011,7 +1011,7 @@ function neowise.new(gprojectName, gprojectVersion, scale)
 
 							neowise:Create("UICorner", {
 								CornerRadius = UDim.new(0, 10 * SCALE),
-								Parent = cheat.button,
+								Parent = cheat.textbox,
 							})
 
 							cheat.textbox.Focused:Connect(function()
