@@ -1014,6 +1014,31 @@ function neowise.new(gprojectName, gprojectVersion, scale)
 								Parent = cheat.textbox,
 							})
 
+							local function truncateText(text)
+								local maxWidth = cheat.textbox.AbsoluteSize.X - 8
+
+								if #text == 0 then
+									return text
+								end
+
+								cheat.textbox.Text = text
+
+								if cheat.textbox.TextBounds.X <= maxWidth then
+									return text
+								end
+
+								for i = #text, 1, -1 do
+									local truncated = text:sub(1, i) .. "..."
+									cheat.textbox.Text = truncated
+
+									if cheat.textbox.TextBounds.X <= maxWidth then
+										return truncated
+									end
+								end
+
+								return "..."
+							end
+
 							cheat.textbox.Focused:Connect(function()
 								typing = true
 							end)
@@ -1036,7 +1061,7 @@ function neowise.new(gprojectName, gprojectVersion, scale)
 
 							function cheat:SetValue(value)
 								cheat.value = tostring(value)
-								cheat.textbox.Text = tostring(value)
+								cheat.textbox.Text = truncateText(value)
 
 								if callback then
 									local s, e = pcall(function()
